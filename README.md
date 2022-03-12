@@ -49,11 +49,11 @@
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. <u>If you're interested in the project, please reach out.</u> Any contributions are **greatly appreciated**.
 
-1. Fork the Project, register via email only (Google login does not work locally)
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+1. Fork the Project, register via email (Google login does not work locally)
+2. Create your Feature/Fix Branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+5. Open a Pull Request using the PR template
 
 ## License
 
