@@ -25,6 +25,7 @@
     "react-dropzone": "^11.3.2",
     "react-flexbox-grid": "^2.1.2",
     "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.28.0",
     "react-image": "^4.0.3",
     "react-redux": "^7.2.4",
     "react-reveal": "^1.2.2",

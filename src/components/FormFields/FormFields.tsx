@@ -20,7 +20,7 @@ const Msg = styled('span', ({ $theme }) => ({
   ...$theme.typography.fontBold12,
   color: $theme.colors.red400,
   marginTop: '5px',
-  marginLeft: 'auto',
+  marginRight: 'auto',
 }));
 
 export const FormFields = ({ children }) => {

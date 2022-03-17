@@ -18,6 +18,8 @@ import { FormFields, FormLabel } from 'components/FormFields/FormFields';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { createBlog } from 'store/blogs';
+import { Error } from 'components/FormFields/FormFields';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 const NewBlogForm: React.FC = () => {
   const history = useHistory();
@@ -35,13 +37,13 @@ const NewBlogForm: React.FC = () => {
   const [checked, setChecked] = React.useState<boolean>(true);
   const dispatch = useDispatch();
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  const onHandleSubmit: SubmitHandler<Inputs> = async (data) => {
+    //event.preventDefault();
 
     await dispatch(
       createBlog({
         blog: {
-          title: blogName,
+          title: data.blogName,
           active: checked,
           hook: buildHook,
           description: description,
@@ -50,7 +52,19 @@ const NewBlogForm: React.FC = () => {
     );
 
     closeDrawer();
-  }
+  };
+
+  type Inputs = {
+    blogName: string;
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  console.log(errors);
 
   return (
     <>
@@ -59,7 +73,7 @@ const NewBlogForm: React.FC = () => {
       </DrawerTitleWrapper>
 
       <Form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit((data) => console.log(data))}
         style={{ height: '100%', backgroundColor: '#f7f7f7' }}
       >
         <Scrollbars
@@ -87,10 +101,14 @@ const NewBlogForm: React.FC = () => {
                 <FormFields>
                   <FormLabel>Blog Name</FormLabel>
                   <Input
+                    {...register('blogName', {
+                      required: 'blog name is required.',
+                    })}
                     value={blogName}
                     onChange={(e) => setBlogName(e.target.value)}
                     required
                   />
+                  <Error>{errors.blogName?.message}</Error>
                 </FormFields>
 
                 <FormFields>
