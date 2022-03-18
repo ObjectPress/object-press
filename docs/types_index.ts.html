@@ -1,0 +1,233 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> types/index.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#slugify">slugify</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>types/index.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @type AuthProps
+ * @param isAuthenticated boolean
+ * @param isValidToken Function
+ * @param signout Function
+ */
+export type AuthProps = {
+  isAuthenticated: boolean;
+  isValidToken: Function;
+  signout: Function;
+};
+
+export type TokenState = {
+  userId: string | null;
+};
+
+export interface JWToken {
+  sub: string;
+  email: string;
+  iat: number;
+  exp: number;
+}
+
+export interface Profile {
+  email: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  company: string;
+  title: string;
+  country: string;
+  website: string;
+  notify: boolean;
+}
+
+export interface Blog {
+  id: string;
+  title: string;
+  hook: string;
+  description: string;
+  active: boolean;
+  createDate: string;
+}
+
+export type NewBlog = Pick&lt;Blog, 'title' | 'active'> &amp;
+  Pick&lt;Partial&lt;Blog>, 'hook' | 'description'>;
+
+export interface BlogRow {
+  id: string;
+  title: string;
+  description: string;
+  createDate: string;
+  active: boolean;
+  hook: string;
+}
+
+export type BlogState = {
+  blogs: Blog[];
+  loading: boolean;
+  error?: string;
+  fetched: boolean;
+};
+
+export interface Content {
+  title: string;
+  publishAt: string;
+  content: string;
+  pageTitle: string;
+  slug: string;
+  keywords: string;
+  description: string;
+  images: string[];
+  altTags: string[];
+}
+
+export type Post = {
+  _id: string;
+  appId: string;
+  active: boolean;
+  createDate: string;
+  modifiedDate: string;
+  post: Content;
+};
+
+export type NewPost = {
+  appId: string;
+  post: Content;
+  active: boolean;
+};
+
+export type UpdatePost = {
+  postId: string;
+  post: Content;
+  active: boolean;
+};
+
+export type PostRow = {
+  _id: string;
+  blog_id: string;
+  blogTitle: string;
+  post: Post;
+  active: boolean;
+};
+
+export type PostState = {
+  posts: Post[];
+  loading: boolean;
+  error?: string;
+};
+
+export interface Notify {
+  id: string;
+  title: string;
+  content: string;
+  createDate: string;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>
