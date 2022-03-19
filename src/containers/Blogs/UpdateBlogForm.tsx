@@ -19,6 +19,13 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_BLOG_QUERY } from 'graphql/queries';
 import { UPDATE_BLOG_MUTATION } from 'graphql/mutations';
+import useFormControl from '../../hooks/useFormControl';
+import {
+  validateBlogName,
+  validateDescription,
+  validateBuildHook,
+} from '../../utils/index';
+import { FormControl } from 'baseui/form-control';
 
 interface BlogParams {
   id: string;
@@ -73,16 +80,61 @@ const UpdateBlogForm: React.FC = () => {
       variables: {
         blog: {
           appId: id,
-          title: blogName,
+          title: newBlogName,
           active: checked,
-          hook: buildHook,
-          description: description,
+          hook: newBuildHook,
+          description: newDescription,
         },
       },
     });
 
     closeDrawer();
   }
+
+  ////////////////////////////
+
+  const {
+    value: newBlogName,
+    isValid: newBlogNameIsValid,
+    onInputChangeHandler: onNewBlogNameChangeHandler,
+    onInputBlurHandler: onNewBlogNameBlurHandler,
+    shouldShowError: shouldNewBlogNameShowError,
+    setInitialValue: setInitialBlogName,
+  } = useFormControl(validateBlogName);
+  const {
+    value: newBuildHook,
+    isValid: newBuildHookIsValid,
+    onInputChangeHandler: onNewBuildHookChangeHandler,
+    onInputBlurHandler: onNewBuildHookBlurHandler,
+    shouldShowError: shouldNewBuildHookShowError,
+    setInitialValue: setInitialBuildHook,
+  } = useFormControl(validateBuildHook);
+  const {
+    value: newDescription,
+    isValid: newDescriptionIsValid,
+    onInputChangeHandler: onNewDescriptionChangeHandler,
+    onInputBlurHandler: onNewDescriptionBlurHandler,
+    shouldShowError: shouldNewDescriptionShowError,
+    setInitialValue: setInitialDescription,
+  } = useFormControl(validateDescription);
+
+  ////////////////////////////
+
+  useEffect(() => {
+    setInitialBlogName(blogName);
+    setInitialBuildHook(buildHook);
+    setInitialDescription(description);
+  }, [
+    blogName,
+    buildHook,
+    description,
+    setInitialBlogName,
+    setInitialBuildHook,
+    setInitialDescription,
+  ]);
+
+  const isFormValid: boolean =
+    newBlogNameIsValid && newDescriptionIsValid && newBuildHookIsValid;
 
   return (
     <>
@@ -118,29 +170,58 @@ const UpdateBlogForm: React.FC = () => {
                 <DrawerBox>
                   <FormFields>
                     <FormLabel>Blog Name</FormLabel>
-                    <Input
-                      required
-                      value={blogName}
-                      onChange={(e) => setBlogName(e.target.value)}
-                    />
+                    <FormControl
+                      error={
+                        shouldNewBlogNameShowError &&
+                        validateBlogName(newBlogName).errorMessage
+                      }
+                    >
+                      <Input
+                        required
+                        value={newBlogName}
+                        onChange={onNewBlogNameChangeHandler}
+                        onBlur={onNewBlogNameBlurHandler}
+                        positive={validateBlogName(newBlogName).isValid}
+                        error={shouldNewBlogNameShowError}
+                      />
+                    </FormControl>
                   </FormFields>
 
                   <FormFields>
                     <FormLabel>Build Hook</FormLabel>
-                    <Input
-                      type="url"
-                      value={buildHook}
-                      onChange={(e) => setBuildHook(e.target.value)}
-                    />
+                    <FormControl
+                      error={
+                        shouldNewBuildHookShowError &&
+                        validateBuildHook(newBuildHook).errorMessage
+                      }
+                    >
+                      <Input
+                        value={newBuildHook}
+                        onChange={onNewBuildHookChangeHandler}
+                        onBlur={onNewBuildHookBlurHandler}
+                        positive={validateBuildHook(newBuildHook).isValid}
+                        error={shouldNewBuildHookShowError}
+                      />
+                    </FormControl>
                   </FormFields>
 
                   <FormFields>
                     <FormLabel>Description</FormLabel>
-                    <Textarea
-                      required
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
+                    <FormControl
+                      error={
+                        shouldNewDescriptionShowError &&
+                        validateDescription(newDescription).errorMessage
+                      }
+                    >
+                      <Textarea
+                        required
+                        value={newDescription}
+                        onChange={onNewDescriptionChangeHandler}
+                        onBlur={onNewDescriptionBlurHandler}
+                        positive={validateDescription(newDescription).isValid}
+                        error={shouldNewDescriptionShowError}
+                      />
+                    </FormControl>
                   </FormFields>
 
                   <FormFields>
@@ -187,6 +268,7 @@ const UpdateBlogForm: React.FC = () => {
 
             <Button
               type="submit"
+              disabled={!isFormValid}
               overrides={{
                 BaseButton: {
                   style: ({ $theme }) => ({

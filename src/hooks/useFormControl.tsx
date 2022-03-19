@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { InputValidation } from '../utils/index';
 
 interface FormControlHook {
-  (validationFunction: (value: string) => boolean): {
+  (validationFunction: InputValidation): {
     value: string;
     isValid: boolean;
     onInputChangeHandler: (e: React.FormEvent<Element>) => void;
     onInputBlurHandler: () => void;
     shouldShowError: boolean;
+    setInitialValue: (initialValue: string) => void;
   };
 }
 
@@ -15,8 +17,16 @@ const useFormControl: FormControlHook = (validationFunction) => {
   const [isValid, setIsValid] = useState<boolean>(false);
   const [isVisited, setIsVisited] = useState<boolean>(false);
 
+  const setInitialValue = useCallback(
+    (initialValue: string) => {
+      setValue(initialValue);
+      setIsValid(validationFunction(initialValue).isValid);
+    },
+    [validationFunction]
+  );
+
   function onInputChangeHandler(e) {
-    setIsValid(validationFunction(e.target.value));
+    setIsValid(validationFunction(e.target.value).isValid);
     setValue(e.target.value);
   }
 
@@ -32,6 +42,7 @@ const useFormControl: FormControlHook = (validationFunction) => {
     onInputChangeHandler,
     onInputBlurHandler,
     shouldShowError,
+    setInitialValue,
   };
 };
 

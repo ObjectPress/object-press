@@ -18,6 +18,14 @@ import { useDrawerDispatch } from 'context/DrawerContext';
 import { useMutation, useQuery } from '@apollo/client';
 import { PROFILE_QUERY } from 'graphql/queries';
 import { PROFILE_MUTATION } from 'graphql/mutations';
+import useFormControl from '../../hooks/useFormControl';
+import {
+  validateUsername,
+  validateFirstName,
+  validateLastName,
+  validateWebsite,
+} from '../../utils';
+import { FormControl } from 'baseui/form-control';
 
 type Props = any;
 
@@ -70,13 +78,13 @@ const ProfileForm: React.FC<Props> = (props) => {
     await update({
       variables: {
         user: {
-          username: username,
-          firstName: firstName,
-          lastName: lastName,
+          username: newUsername,
+          firstName: newFirstName,
+          lastName: newLastName,
           company: company,
           title: title,
           country: country,
-          website: website,
+          website: newWebsite,
           notify: checked,
         },
       },
@@ -88,6 +96,65 @@ const ProfileForm: React.FC<Props> = (props) => {
 
     closeDrawer();
   }
+
+  ////////////////////////////
+
+  const {
+    value: newUsername,
+    isValid: newUsernameIsValid,
+    onInputChangeHandler: onNewUsernameChangeHandler,
+    onInputBlurHandler: onNewUsernameBlurHandler,
+    shouldShowError: shouldNewUsernameShowError,
+    setInitialValue: setInitialUsername,
+  } = useFormControl(validateUsername);
+  const {
+    value: newFirstName,
+    isValid: newFirstNameIsValid,
+    onInputChangeHandler: onNewFirstNameChangeHandler,
+    onInputBlurHandler: onNewFirstNameBlurHandler,
+    shouldShowError: shouldNewFirstNameShowError,
+    setInitialValue: setInitialFirstName,
+  } = useFormControl(validateFirstName);
+  const {
+    value: newLastName,
+    isValid: newLastNameIsValid,
+    onInputChangeHandler: onNewLastNameChangeHandler,
+    onInputBlurHandler: onNewLastNameBlurHandler,
+    shouldShowError: shouldNewLastNameShowError,
+    setInitialValue: setInitialLastName,
+  } = useFormControl(validateLastName);
+  const {
+    value: newWebsite,
+    isValid: newWebsiteIsValid,
+    onInputChangeHandler: onNewWebsiteChangeHandler,
+    onInputBlurHandler: onNewWebsiteBlurHandler,
+    shouldShowError: shouldNewWebsiteShowError,
+    setInitialValue: setInitialWebsite,
+  } = useFormControl(validateWebsite);
+
+  ////////////////////////////
+
+  useEffect(() => {
+    setInitialUsername(username);
+    setInitialFirstName(firstName);
+    setInitialLastName(lastName);
+    setInitialWebsite(website);
+  }, [
+    username,
+    firstName,
+    lastName,
+    website,
+    setInitialUsername,
+    setInitialFirstName,
+    setInitialLastName,
+    setInitialWebsite,
+  ]);
+
+  const isFormValid: boolean =
+    newUsernameIsValid &&
+    newFirstNameIsValid &&
+    newLastNameIsValid &&
+    newWebsiteIsValid;
 
   return (
     <>
@@ -121,32 +188,62 @@ const ProfileForm: React.FC<Props> = (props) => {
                 <DrawerBox>
                   <FormFields>
                     <FormLabel>Username</FormLabel>
-                    <Input
-                      required
-                      name="username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                    />
+                    <FormControl
+                      error={
+                        shouldNewUsernameShowError &&
+                        validateUsername(newUsername).errorMessage
+                      }
+                    >
+                      <Input
+                        required
+                        name="username"
+                        value={newUsername}
+                        onChange={onNewUsernameChangeHandler}
+                        onBlur={onNewUsernameBlurHandler}
+                        positive={validateUsername(newUsername).isValid}
+                        error={shouldNewUsernameShowError}
+                      />
+                    </FormControl>
                   </FormFields>
 
                   <FormFields>
                     <FormLabel>First Name</FormLabel>
-                    <Input
-                      required
-                      name="first_name"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                    />
+                    <FormControl
+                      error={
+                        shouldNewFirstNameShowError &&
+                        validateFirstName(newFirstName).errorMessage
+                      }
+                    >
+                      <Input
+                        required
+                        name="first_name"
+                        value={newFirstName}
+                        onChange={onNewFirstNameChangeHandler}
+                        onBlur={onNewFirstNameBlurHandler}
+                        positive={validateFirstName(newFirstName).isValid}
+                        error={shouldNewFirstNameShowError}
+                      />
+                    </FormControl>
                   </FormFields>
 
                   <FormFields>
                     <FormLabel>Last Name</FormLabel>
-                    <Input
-                      required
-                      name="last_name"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                    />
+                    <FormControl
+                      error={
+                        shouldNewLastNameShowError &&
+                        validateLastName(newLastName).errorMessage
+                      }
+                    >
+                      <Input
+                        required
+                        name="last_name"
+                        value={newLastName}
+                        onChange={onNewLastNameChangeHandler}
+                        onBlur={onNewLastNameBlurHandler}
+                        positive={validateLastName(newLastName).isValid}
+                        error={shouldNewLastNameShowError}
+                      />
+                    </FormControl>
                   </FormFields>
 
                   <FormFields>
@@ -178,13 +275,22 @@ const ProfileForm: React.FC<Props> = (props) => {
 
                   <FormFields>
                     <FormLabel>Website</FormLabel>
-                    <Input
-                      name="website"
-                      type="url"
-                      required
-                      value={website}
-                      onChange={(e) => setWebsite(e.target.value)}
-                    />
+                    <FormControl
+                      error={
+                        shouldNewWebsiteShowError &&
+                        validateWebsite(newWebsite).errorMessage
+                      }
+                    >
+                      <Input
+                        name="website"
+                        required
+                        value={newWebsite}
+                        onChange={onNewWebsiteChangeHandler}
+                        onBlur={onNewWebsiteBlurHandler}
+                        positive={validateWebsite(newWebsite).isValid}
+                        error={shouldNewWebsiteShowError}
+                      />
+                    </FormControl>
                   </FormFields>
 
                   <FormFields>
@@ -242,6 +348,7 @@ const ProfileForm: React.FC<Props> = (props) => {
 
             <Button
               type="submit"
+              disabled={!isFormValid}
               overrides={{
                 BaseButton: {
                   style: ({ $theme }) => ({

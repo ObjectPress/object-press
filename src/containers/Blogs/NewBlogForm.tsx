@@ -19,7 +19,12 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { createBlog } from 'store/blogs';
 import { FormControl } from 'baseui/form-control';
-import useFormControl from './hooks/useFormControl';
+import useFormControl from '../../hooks/useFormControl';
+import {
+  validateBlogName,
+  validateDescription,
+  validateBuildHook,
+} from '../../utils/index';
 
 export default function NewBlogForm() {
   const history = useHistory();
@@ -32,7 +37,7 @@ export default function NewBlogForm() {
 
   const closeDrawer = useCallback(close, [drawerDispatch, history]);
   //const [blogName, setBlogName] = useState<string>('');
-  const [buildHook, setBuildHook] = useState<string>('');
+  //const [buildHook, setBuildHook] = useState<string>('');
   //const [description, setDescription] = useState<string>('');
   const [checked, setChecked] = useState<boolean>(true);
   const dispatch = useDispatch();
@@ -56,13 +61,6 @@ export default function NewBlogForm() {
 
   //////////////////////////
 
-  function validateBlogName(value: string): boolean {
-    return value.trim().length > 0;
-  }
-  function validateDescription(value: string): boolean {
-    return value.trim().length > 10;
-  }
-
   const {
     value: blogName,
     isValid: blogNameIsValid,
@@ -70,6 +68,13 @@ export default function NewBlogForm() {
     onInputBlurHandler: onBlogNameBlurHandler,
     shouldShowError: shouldBlogNameShowError,
   } = useFormControl(validateBlogName);
+  const {
+    value: buildHook,
+    isValid: buildHookIsValid,
+    onInputChangeHandler: onBuildHookChangeHandler,
+    onInputBlurHandler: onBuildHookBlurHandler,
+    shouldShowError: shouldBuildHookShowError,
+  } = useFormControl(validateBuildHook);
   const {
     value: description,
     isValid: descriptionIsValid,
@@ -80,7 +85,8 @@ export default function NewBlogForm() {
 
   //////////////////////////
 
-  const isFormValid: boolean = blogNameIsValid && descriptionIsValid;
+  const isFormValid: boolean =
+    blogNameIsValid && descriptionIsValid && buildHookIsValid;
 
   return (
     <>
@@ -118,16 +124,15 @@ export default function NewBlogForm() {
                   <FormLabel>Blog Name</FormLabel>
                   <FormControl
                     error={
-                      shouldBlogNameShowError
-                        ? 'Blog Name should not be empty.'
-                        : null
+                      shouldBlogNameShowError &&
+                      validateBlogName(blogName).errorMessage
                     }
                   >
                     <Input
                       value={blogName}
                       onChange={onBlogNameChangeHandler}
                       onBlur={onBlogNameBlurHandler}
-                      positive={validateBlogName(blogName)}
+                      positive={validateBlogName(blogName).isValid}
                       error={shouldBlogNameShowError}
                       required
                     />
@@ -136,26 +141,36 @@ export default function NewBlogForm() {
 
                 <FormFields>
                   <FormLabel>Build Hook</FormLabel>
-                  <Input
-                    value={buildHook}
-                    onChange={(e) => setBuildHook(e.target.value)}
-                  />
+                  <FormControl
+                    error={
+                      shouldBuildHookShowError &&
+                      validateBuildHook(buildHook).errorMessage
+                    }
+                  >
+                    <Input
+                      value={buildHook}
+                      onChange={onBuildHookChangeHandler}
+                      onBlur={onBuildHookBlurHandler}
+                      positive={validateBuildHook(buildHook).isValid}
+                      error={shouldBuildHookShowError}
+                      required
+                    />
+                  </FormControl>
                 </FormFields>
 
                 <FormFields>
                   <FormLabel>Description</FormLabel>
                   <FormControl
                     error={
-                      shouldDescriptionShowError
-                        ? 'Description must have at least 10 letters.'
-                        : null
+                      shouldDescriptionShowError &&
+                      validateDescription(description).errorMessage
                     }
                   >
                     <Textarea
                       value={description}
                       onChange={onDescriptionChangeHandler}
                       onBlur={onDescriptionBlurHandler}
-                      positive={validateDescription(description)}
+                      positive={validateDescription(description).isValid}
                       error={shouldDescriptionShowError}
                       required
                     />

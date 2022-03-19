@@ -18,7 +18,133 @@ export const isUrl = (url: string): boolean => {
 };
 
 export const isLength = (value: string, length: number): boolean => {
-  const validLength = value.length <= length;
+  const validLength = value.length >= length;
 
   return validLength;
+};
+
+export interface InputValidation {
+  (value: string): {
+    isValid: boolean;
+    errorMessage: string | null;
+  };
+}
+
+export const validateBlogName: InputValidation = (value) => {
+  let isValid: boolean = isLength(slugify(value), 1);
+  let errorMessage: string | null = null;
+
+  if (isValid) {
+    errorMessage = null;
+  } else {
+    errorMessage = 'Blog Name should not be empty.';
+  }
+
+  return {
+    isValid,
+    errorMessage,
+  };
+};
+
+export const validateBuildHook: InputValidation = (value) => {
+  let isValueNotEmpty: boolean = isLength(value, 1);
+  let isValueUrlFormat: boolean = isUrl(value);
+  let isValid: boolean = isValueNotEmpty && isValueUrlFormat;
+  let errorMessage: string | null = null;
+
+  if (!isValueUrlFormat) {
+    errorMessage = 'Build Hook should be a valid URL.';
+  }
+
+  if (!isValueNotEmpty) {
+    errorMessage = 'Build Hook should not be empty.';
+  }
+
+  if (isValid) {
+    errorMessage = null;
+  }
+
+  return {
+    isValid,
+    errorMessage,
+  };
+};
+
+export const validateDescription: InputValidation = (value) => {
+  let isValid: boolean = isLength(slugify(value), 10);
+  let errorMessage: string | null = null;
+
+  if (isValid) {
+    errorMessage = null;
+  } else {
+    errorMessage = 'Description should have at least 10 characters.';
+  }
+
+  return {
+    isValid,
+    errorMessage,
+  };
+};
+
+export const validateUsername: InputValidation = (value) => {
+  let isValid: boolean = isLength(slugify(value), 1);
+  let errorMessage: string | null = null;
+
+  isValid
+    ? (errorMessage = null)
+    : (errorMessage = 'Username should not be empty');
+  return {
+    isValid,
+    errorMessage,
+  };
+};
+
+export const validateFirstName: InputValidation = (value) => {
+  let isValid: boolean = isLength(slugify(value), 1);
+  let errorMessage: string | null = null;
+
+  isValid
+    ? (errorMessage = null)
+    : (errorMessage = 'First Name should not be empty');
+  return {
+    isValid,
+    errorMessage,
+  };
+};
+
+export const validateLastName: InputValidation = (value) => {
+  let isValid: boolean = isLength(slugify(value), 1);
+  let errorMessage: string | null = null;
+
+  isValid
+    ? (errorMessage = null)
+    : (errorMessage = 'Last Name should not be empty');
+  return {
+    isValid,
+    errorMessage,
+  };
+};
+
+export const validateWebsite: InputValidation = (value) => {
+  let isValueNotEmpty: boolean = isLength(value, 1);
+  let isValueUrlFormat: boolean = isUrl(value);
+  let isValid: boolean = isValueNotEmpty && isValueUrlFormat;
+  let errorMessage: string | null = null;
+
+  if (!isValueUrlFormat) {
+    errorMessage = 'Website should be a valid URL.';
+  }
+
+  if (!isValueNotEmpty) {
+    errorMessage = 'Website should not be empty.';
+  }
+
+  if (isValid) {
+    errorMessage = null;
+  }
+
+  return {
+    isValid,
+    errorMessage,
+  };
 };
