@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDrawerDispatch } from 'context/DrawerContext';
+import { useDrawerDispatch, useDrawerState } from 'context/DrawerContext';
 import dayjs from 'dayjs';
 // styled components
 import Select from 'components/Select/Select';
@@ -66,6 +66,7 @@ export default function Posts() {
   const _blogs = useSelector(blogsSelector());
   const loading = useSelector(postsLoadingSelector());
   const [posts, setPosts] = useState<Post[]>([]);
+  const isOpen = useDrawerState('isOpen');
 
   async function getPosts() {
     const posts = ((await dispatch(fetchPosts())) as any).payload as Post[];
@@ -75,11 +76,11 @@ export default function Posts() {
   }
 
   useEffect(() => {
-    if (!postsFetched || search?.length === 0) {
+    if (!postsFetched || search?.length === 0 || !isOpen) {
       getPosts();
     }
     // eslint-disable-next-line
-  }, [postsFetched, search]);
+  }, [postsFetched, search, isOpen]);
 
   useEffect(() => {
     if (!_blogs?.length && !blogsFetched) {

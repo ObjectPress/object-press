@@ -106,7 +106,6 @@ const NewPostForm: React.FC = () => {
   function close() {
     drawerDispatch({ type: 'CLOSE_DRAWER' });
     history.replace(`/posts`);
-    history.go(0);
   }
 
   const closeDrawer = useCallback(close, [drawerDispatch, history]);

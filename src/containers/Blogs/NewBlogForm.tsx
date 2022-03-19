@@ -32,7 +32,6 @@ export default function NewBlogForm() {
   function close() {
     drawerDispatch({ type: 'CLOSE_DRAWER' });
     history.replace(`/blogs`);
-    history.go(0);
   }
 
   const closeDrawer = useCallback(close, [drawerDispatch, history]);

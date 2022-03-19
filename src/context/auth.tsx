@@ -18,6 +18,7 @@ const AuthProvider: React.FC = (props: any) => {
     try {
       const accessToken = localStorage?.getItem('op-access-token') as string;
       const decoded = jwt_decode<JWToken>(accessToken);
+
       if (decoded.exp > Math.floor(Date.now() / 1000)) {
         makeAuthenticated(true);
         return true;
@@ -78,7 +79,7 @@ const AuthProvider: React.FC = (props: any) => {
         signout,
       }}
     >
-      <>{props.children}</>
+      {props.children}
     </AuthContext.Provider>
   );
 };

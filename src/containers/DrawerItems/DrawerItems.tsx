@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
 import Drawer from 'components/Drawer/Drawer';
 import { CloseIcon } from 'assets/icons/CloseIcon';
 import { useDrawerState, useDrawerDispatch } from 'context/DrawerContext';
@@ -29,11 +28,10 @@ export default function DrawerItems() {
   const drawerComponent = useDrawerState('drawerComponent');
   const data = useDrawerState('data');
   const dispatch = useDrawerDispatch();
-  const history = useHistory();
+
   const closeDrawer = useCallback(() => {
     dispatch({ type: 'CLOSE_DRAWER' });
-    history.go(-1);
-  }, [dispatch, history]);
+  }, [dispatch]);
   if (!drawerComponent) {
     return null;
   }
