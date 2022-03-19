@@ -13,7 +13,7 @@ import {
 } from '../DrawerItems/DrawerItems.style';
 import { FormFields, FormLabel } from 'components/FormFields/FormFields';
 import { useEffect } from 'react';
-import { useDrawerDispatch } from 'context/DrawerContext';
+import { useDrawerDispatch, useDrawerState } from 'context/DrawerContext';
 import { useQuery } from '@apollo/client';
 import { CREDS_QUERY } from 'graphql/queries';
 
@@ -27,6 +27,7 @@ const CredsForm: React.FC<Props> = (props) => {
   const [userSecret, setUserSecret] = useState<string>('');
   const [appSecret, setAppSecret] = useState<string[]>([]);
   const [blogTitles, setBlogTitles] = useState<string[]>([]);
+  const isOpen = useDrawerState('isOpen');
 
   const { data, loading } = useQuery(CREDS_QUERY);
 
@@ -41,10 +42,10 @@ const CredsForm: React.FC<Props> = (props) => {
   const getUserCreds = useCallback(fetchCreds, [data]);
 
   useEffect(() => {
-    if (data?.getAllBlogs[0] && !loading) {
+    if ((data?.getAllBlogs[0] && !loading) || !isOpen) {
       getUserCreds();
     }
-  }, [getUserCreds, loading, data]);
+  }, [getUserCreds, loading, data, isOpen]);
 
   function copy(secret) {
     navigator.clipboard.writeText(secret);

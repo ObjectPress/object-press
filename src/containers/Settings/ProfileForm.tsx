@@ -14,7 +14,7 @@ import {
 } from '../DrawerItems/DrawerItems.style';
 import { FormFields, FormLabel } from 'components/FormFields/FormFields';
 import { useHistory } from 'react-router';
-import { useDrawerDispatch } from 'context/DrawerContext';
+import { useDrawerDispatch, useDrawerState } from 'context/DrawerContext';
 import { useMutation, useQuery } from '@apollo/client';
 import { PROFILE_QUERY } from 'graphql/queries';
 import { PROFILE_MUTATION } from 'graphql/mutations';
@@ -27,7 +27,6 @@ const ProfileForm: React.FC<Props> = (props) => {
   const closeDrawer = useCallback(() => {
     dispatch({ type: 'CLOSE_DRAWER' });
     history.replace(`/settings`);
-    history.go(0);
   }, [dispatch, history]);
 
   const [username, setUsername] = useState<string>('');
@@ -41,6 +40,7 @@ const ProfileForm: React.FC<Props> = (props) => {
   const [checked, setChecked] = useState<boolean>(true);
   const { data, loading } = useQuery(PROFILE_QUERY);
   const [update] = useMutation(PROFILE_MUTATION);
+  const isOpen = useDrawerState('isOpen');
 
   async function fetchSettings() {
     const res = data?.getUser;
@@ -59,10 +59,10 @@ const ProfileForm: React.FC<Props> = (props) => {
   const getUserInfo = useCallback(fetchSettings, [data]);
 
   useEffect(() => {
-    if (data?.getUser && !loading) {
+    if ((data?.getUser && !loading) || !isOpen) {
       getUserInfo();
     }
-  }, [getUserInfo, loading, data]);
+  }, [getUserInfo, loading, data, isOpen]);
 
   async function onSubmit(event) {
     event.preventDefault();

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDrawerDispatch } from 'context/DrawerContext';
+import { useDrawerDispatch, useDrawerState } from 'context/DrawerContext';
 import dayjs from 'dayjs';
 // styled components
 import Input from 'components/Input/Input';
@@ -40,6 +40,7 @@ export const Blogs: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [checkedId, setCheckedId] = useState<string>('');
+  const isOpen = useDrawerState('isOpen');
 
   const openDrawer = useCallback(() => {
     drawerDispatch({ type: 'OPEN_DRAWER', drawerComponent: 'BLOG_FORM' });
@@ -74,11 +75,11 @@ export const Blogs: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!fetched) {
+    if (!fetched || !isOpen) {
       getBlogs();
     }
     // eslint-disable-next-line
-  }, [fetched]);
+  }, [fetched, isOpen]);
 
   useEffect(() => {
     if (_blogs?.length) {
