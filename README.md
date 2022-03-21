@@ -51,7 +51,7 @@ Join the conversation via [Slack](https://join.slack.com/t/object-press/shared_i
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. If you're interested in the project, please reach out and check the [docs](https://objectpress.github.io/object-press/). Any contributions are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. If you're interested in the project, please reach out and check the [docs](https://docs.objectpress.io). Any contributions are **greatly appreciated**.
 
 1. Fork the Project, register via email (Google login does not work locally)
 2. Create your Feature/Fix Branch (`git checkout -b feature/AmazingFeature`)
