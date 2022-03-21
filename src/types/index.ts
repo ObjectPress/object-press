@@ -15,11 +15,7 @@ export type TokenState = {
 };
 
 /**
- * @interface JWToken
- * @property sub string
- * @property email string
- * @property iat number
- * @property exp number
+ * @type JWToken
  */
 export interface JWToken {
   sub: string;
@@ -29,16 +25,7 @@ export interface JWToken {
 }
 
 /**
- * @interface Profile
- * @property email string
- * @property username string
- * @property firstName string
- * @property lastName string
- * @property company string
- * @property title string
- * @property country string
- * @property website string
- * @property notify boolean
+ * @type Profile
  */
 export interface Profile {
   email: string;
@@ -53,13 +40,7 @@ export interface Profile {
 }
 
 /**
- * @interface Blog
- * @property id string
- * @property title string
- * @property hook string
- * @property description string
- * @property active boolean
- * @property createDate string
+ * @type Blog
  */
 export interface Blog {
   id: string;
@@ -72,22 +53,12 @@ export interface Blog {
 
 /**
  * @type NewBlog
- * @property title string
- * @property active boolean
- * @property hook string | undefined
- * @property description string | undefined
  */
 export type NewBlog = Pick<Blog, 'title' | 'active'> &
   Pick<Partial<Blog>, 'hook' | 'description'>;
 
 /**
- * @interface BlogRow
- * @property id string
- * @property title string
- * @property description string
- * @property createDate string
- * @property active boolean
- * @property hook string
+ * @type BlogRow
  */
 export interface BlogRow {
   id: string;
@@ -109,16 +80,7 @@ export type BlogState = {
 };
 
 /**
- * @interface Content
- * @property title string
- * @property publishAt string
- * @property content string
- * @property pageTitle string
- * @property slug string
- * @property keywords string
- * @property description string
- * @property images Array
- * @property altTags Array
+ * @type Content
  */
 export interface Content {
   title: string;
@@ -183,11 +145,7 @@ export type PostState = {
 };
 
 /**
- * @interface Notify
- * @property id string
- * @property title string
- * @property content string
- * @property createDate string
+ * @type Notify
  */
 export interface Notify {
   id: string;
