@@ -25,30 +25,17 @@ import { editPost, fetchPost } from 'store/posts';
 import { Post } from 'types';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Error } from '../../components/FormFields/FormFields';
 
 const options = [
   { value: true, name: 'Active' },
   { value: false, name: 'Pending' },
 ];
 
-const CustomSelect: React.FC<any> = ({
-  active,
-  options,
-  labelKey,
-  valueKey,
-  placeholder,
-  onChange,
-  ...props
-}) => {
+const CustomSelect: React.FC<any> = (props) => {
   return (
     <Select
-      options={options}
-      labelKey={labelKey}
-      valueKey={valueKey}
-      placeholder={placeholder}
-      value={active}
-      searchable={false}
-      onChange={onChange}
+      {...props}
       overrides={{
         Placeholder: {
           style: ({ $theme }) => {
@@ -94,7 +81,6 @@ const CustomSelect: React.FC<any> = ({
           },
         },
       }}
-      {...props}
     />
   );
 };
@@ -113,6 +99,7 @@ const NewPostForm: React.FC = () => {
   const [pageTitle, setPageTitle] = useState<string>('');
   const [slug, setSlug] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [isMdEditorVisited, setIsMdEditorVisited] = useState<boolean>(false);
   const [description, setDescription] = useState<string>('');
   const [active, setActive] = useState([]);
   const [altTags, setAltTags] = useState<string[]>(['']);
@@ -214,6 +201,12 @@ const NewPostForm: React.FC = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!isMdEditorValid) {
+      setIsMdEditorVisited(true);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -257,6 +250,17 @@ const NewPostForm: React.FC = () => {
   const handleDescriptionChange = (value: string) => {
     setDescription(value);
   };
+
+  const onMdEditorChangeHandler = (value: string) => {
+    if (!isMdEditorVisited) {
+      setIsMdEditorVisited(true);
+    }
+
+    setContent(value!);
+  };
+
+  const isMdEditorValid = content.length > 0;
+  const shouldMdEditorShowError = isMdEditorVisited && !isMdEditorValid;
 
   return (
     <>
@@ -338,7 +342,13 @@ const NewPostForm: React.FC = () => {
                 <FormFields>
                   <FormLabel>Content</FormLabel>
 
-                  <MDEditor value={content} onChange={setContent} />
+                  <MDEditor
+                    value={content}
+                    onChange={onMdEditorChangeHandler}
+                  />
+                  {shouldMdEditorShowError && (
+                    <Error>Content should not be empty.</Error>
+                  )}
                 </FormFields>
 
                 <FormFields>
@@ -390,6 +400,7 @@ const NewPostForm: React.FC = () => {
                 <FormFields>
                   <FormLabel>Status</FormLabel>
                   <CustomSelect
+                    required
                     options={options}
                     labelKey="name"
                     valueKey="value"
