@@ -26,6 +26,9 @@ import { Post } from 'types';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Error } from '../../components/FormFields/FormFields';
+import useFormControl from 'hooks/useFormControl';
+import { FormControl } from 'baseui/form-control';
+import { validatePostTitle, validatePageTitle } from '../../utils';
 
 const options = [
   { value: true, name: 'Active' },
@@ -95,8 +98,6 @@ const NewPostForm: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const closeDrawer = useCallback(close, [drawerDispatch, history]);
-  const [title, setTitle] = useState<string>('');
-  const [pageTitle, setPageTitle] = useState<string>('');
   const [slug, setSlug] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [isMdEditorVisited, setIsMdEditorVisited] = useState<boolean>(false);
@@ -145,9 +146,9 @@ const NewPostForm: React.FC = () => {
         altTags,
       } = post.post;
 
-      setTitle(title);
+      setInitialPostTitle(title);
       setPublishDate(new Date(publishAt));
-      setPageTitle(pageTitle);
+      setInitialPageTitle(pageTitle);
       setSlug(slugify(pageTitle));
       setContent(content);
       setDescription(description);
@@ -215,11 +216,11 @@ const NewPostForm: React.FC = () => {
           post: {
             postId: id,
             post: {
-              title,
+              title: newPostTitle,
               publishAt: publishDate.toISOString(),
               content,
-              pageTitle: pageTitle,
-              slug: slugify(pageTitle),
+              pageTitle: newPageTitle,
+              slug: slugify(newPageTitle),
               keywords,
               description,
               images: images?.length ? images : [''],
@@ -261,6 +262,21 @@ const NewPostForm: React.FC = () => {
 
   const isMdEditorValid = content.length > 0;
   const shouldMdEditorShowError = isMdEditorVisited && !isMdEditorValid;
+
+  const {
+    value: newPostTitle,
+    onInputChangeHandler: onNewPostTitleChangeHandler,
+    onInputBlurHandler: onNewPostTitleBlurHandler,
+    shouldShowError: shouldNewPostTitleShowError,
+    setInitialValue: setInitialPostTitle,
+  } = useFormControl(validatePostTitle);
+  const {
+    value: newPageTitle,
+    onInputChangeHandler: onNewPageTitleChangeHandler,
+    onInputBlurHandler: onNewPageTitleBlurHandler,
+    shouldShowError: shouldNewPageTitleShowError,
+    setInitialValue: setInitialPageTitle,
+  } = useFormControl(validatePageTitle);
 
   return (
     <>
@@ -320,13 +336,22 @@ const NewPostForm: React.FC = () => {
               <DrawerBox>
                 <FormFields>
                   <FormLabel>Post Title</FormLabel>
-                  <Input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                    maxLegnth={25}
-                    name="name"
-                  />
+                  <FormControl
+                    error={
+                      shouldNewPostTitleShowError &&
+                      validatePostTitle(newPostTitle).errorMessage
+                    }
+                  >
+                    <Input
+                      required
+                      name="post title"
+                      value={newPostTitle}
+                      onChange={onNewPostTitleChangeHandler}
+                      onBlur={onNewPostTitleBlurHandler}
+                      positive={validatePostTitle(newPostTitle).isValid}
+                      error={shouldNewPostTitleShowError}
+                    />
+                  </FormControl>
                 </FormFields>
 
                 <FormFields>
@@ -353,16 +378,25 @@ const NewPostForm: React.FC = () => {
 
                 <FormFields>
                   <FormLabel>Page Title</FormLabel>
-                  <Input
-                    required
-                    type="text"
-                    name="page title"
-                    value={pageTitle}
-                    onChange={(e) => {
-                      setPageTitle(e.target.value);
-                      setSlug(slugify(e.target.value));
-                    }}
-                  />
+                  <FormControl
+                    error={
+                      shouldNewPageTitleShowError &&
+                      validatePageTitle(newPageTitle).errorMessage
+                    }
+                  >
+                    <Input
+                      required
+                      name="page title"
+                      value={newPageTitle}
+                      onChange={(e) => {
+                        onNewPageTitleChangeHandler(e);
+                        setSlug(slugify(e.target.value));
+                      }}
+                      onBlur={onNewPageTitleBlurHandler}
+                      positive={validatePageTitle(newPageTitle).isValid}
+                      error={shouldNewPageTitleShowError}
+                    />
+                  </FormControl>
                 </FormFields>
 
                 <FormFields>

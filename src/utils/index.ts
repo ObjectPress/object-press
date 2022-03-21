@@ -148,3 +148,29 @@ export const validateWebsite: InputValidation = (value) => {
     errorMessage,
   };
 };
+
+export const validatePostTitle: InputValidation = (value) => {
+  let isValid: boolean = isLength(slugify(value), 1);
+  let errorMessage: string | null = null;
+
+  isValid
+    ? (errorMessage = null)
+    : (errorMessage = 'Post Title should not be empty');
+  return {
+    isValid,
+    errorMessage,
+  };
+};
+
+export const validatePageTitle: InputValidation = (value) => {
+  let isValid: boolean = isLength(slugify(value), 1);
+  let errorMessage: string | null = null;
+
+  isValid
+    ? (errorMessage = null)
+    : (errorMessage = 'Page Title should not be empty');
+  return {
+    isValid,
+    errorMessage,
+  };
+};

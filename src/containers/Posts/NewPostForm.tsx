@@ -26,6 +26,9 @@ import { addPost } from 'store/posts';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Error } from '../../components/FormFields/FormFields';
+import useFormControl from '../../hooks/useFormControl';
+import { validatePostTitle, validatePageTitle } from '../../utils';
+import { FormControl } from 'baseui/form-control';
 
 const options = [
   { value: true, name: 'Active' },
@@ -94,8 +97,6 @@ const NewPostForm: React.FC = () => {
   }
 
   const closeDrawer = useCallback(close, [drawerDispatch, history]);
-  const [title, setTitle] = useState<string>('');
-  const [pageTitle, setPageTitle] = useState<string>('');
   const [slug, setSlug] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [isMdEditorVisited, setIsMdEditorVisited] = useState<boolean>(false);
@@ -191,7 +192,7 @@ const NewPostForm: React.FC = () => {
           post: {
             appId: blogId[0].id,
             post: {
-              title,
+              title: postTitle,
               publishAt: publishAt.toISOString(),
               content,
               pageTitle,
@@ -250,6 +251,19 @@ const NewPostForm: React.FC = () => {
   const isMdEditorValid = content.length > 0;
   const shouldMdEditorShowError = isMdEditorVisited && !isMdEditorValid;
 
+  const {
+    value: postTitle,
+    onInputChangeHandler: onPostTitleChangeHandler,
+    onInputBlurHandler: onPostTitleBlurHandler,
+    shouldShowError: shouldPostTitleShowError,
+  } = useFormControl(validatePostTitle);
+  const {
+    value: pageTitle,
+    onInputChangeHandler: onPageTitleChangeHandler,
+    onInputBlurHandler: onPageTitleBlurHandler,
+    shouldShowError: shouldPageTitleShowError,
+  } = useFormControl(validatePageTitle);
+
   return (
     <>
       <DrawerTitleWrapper>
@@ -306,13 +320,22 @@ const NewPostForm: React.FC = () => {
               <DrawerBox>
                 <FormFields>
                   <FormLabel>Post Title</FormLabel>
-                  <Input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                    maxLegnth={25}
-                    name="name"
-                  />
+                  <FormControl
+                    error={
+                      shouldPostTitleShowError &&
+                      validatePostTitle(postTitle).errorMessage
+                    }
+                  >
+                    <Input
+                      required
+                      name="post title"
+                      value={postTitle}
+                      onChange={onPostTitleChangeHandler}
+                      onBlur={onPostTitleBlurHandler}
+                      positive={validatePostTitle(postTitle).isValid}
+                      error={shouldPostTitleShowError}
+                    />
+                  </FormControl>
                 </FormFields>
 
                 <FormFields>
@@ -339,16 +362,25 @@ const NewPostForm: React.FC = () => {
 
                 <FormFields>
                   <FormLabel>Page Title</FormLabel>
-                  <Input
-                    required
-                    type="text"
-                    name="page title"
-                    value={pageTitle}
-                    onChange={(e) => {
-                      setPageTitle(e.target.value);
-                      setSlug(slugify(e.target.value));
-                    }}
-                  />
+                  <FormControl
+                    error={
+                      shouldPageTitleShowError &&
+                      validatePageTitle(pageTitle).errorMessage
+                    }
+                  >
+                    <Input
+                      required
+                      name="page title"
+                      value={pageTitle}
+                      onChange={(e) => {
+                        onPageTitleChangeHandler(e);
+                        setSlug(slugify(e.target.value));
+                      }}
+                      onBlur={onPageTitleBlurHandler}
+                      positive={validatePageTitle(pageTitle).isValid}
+                      error={shouldPageTitleShowError}
+                    />
+                  </FormControl>
                 </FormFields>
 
                 <FormFields>
