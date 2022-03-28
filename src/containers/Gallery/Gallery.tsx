@@ -13,6 +13,7 @@ import Fade from 'react-reveal/Fade';
 import ProductCard from 'components/ProductCard/ProductCard';
 import Placeholder from 'components/Placeholder/Placeholder';
 import StickerLabel from 'components/Widgets/StickerCard/StickerLabel';
+import NoResult from '../../components/NoResult/NoResult';
 
 export default function Posts() {
   const [selectedBlog, setSelectedBlog] = useState([]);
@@ -20,10 +21,11 @@ export default function Posts() {
   const dispatch = useDispatch();
   const [blogsFetched, setBlogsFetched] = useState(false);
   const _blogs = useSelector(blogsSelector());
-  const [images, setImages] = useState<string[]>(['']);
+  const [images, setImages] = useState<string[]>([]);
   const [content, setContent] = useState<string[]>(['']);
   const [tags, setTags] = useState<string[]>(['']);
   const [imageNum, setImageNum] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!_blogs?.length && !blogsFetched) {
@@ -34,13 +36,14 @@ export default function Posts() {
 
   useEffect(() => {
     if (search?.length === 0) {
-      setImages(['']);
+      setImages([]);
     }
   }, [search]);
 
   const handleSearch = async () => {
     const value = search;
-    setImages(['']);
+    setImages([]);
+    setIsLoading(true);
 
     if (value && value.length >= 2) {
       const posts = ((await dispatch(searchPosts(value))) as any)
@@ -82,10 +85,12 @@ export default function Posts() {
 
     setSearch(value);
     setSelectedBlog([]);
+    setIsLoading(false);
   };
 
   const handleBlog = async ({ value }) => {
-    setImages(['']);
+    setImages([]);
+    setIsLoading(true);
     if (value.length) {
       const posts = ((await dispatch(searchPostsByBlog(value[0].id))) as any)
         .payload as Post[];
@@ -126,7 +131,9 @@ export default function Posts() {
 
     setSelectedBlog(value);
     setSearch('');
+    setIsLoading(false);
   };
+  console.log(images);
 
   return (
     <Grid fluid={true}>
@@ -195,55 +202,79 @@ export default function Posts() {
               </Row>
             </Col>
           </Header>
-
+          {!isLoading && images.length === 0 && <NoResult />}
           <Row>
-            {images[0] ? (
-              images.map((image: string, index: number) => {
-                return (
-                  <Col
-                    md={4}
-                    lg={3}
-                    sm={6}
-                    xs={12}
-                    key={index}
-                    style={{ margin: '15px 0' }}
-                  >
-                    <Fade bottom duration={800} delay={index * 10}>
-                      <ProductCard
-                        title={content[index]}
-                        tag={tags[index]}
-                        image={image}
-                        index={imageNum[index]}
-                        data={image}
-                      />
-                    </Fade>
-                  </Col>
-                );
-              })
-            ) : (
-              <>
-                <Col md={4} lg={3} sm={6} xs={12} style={{ margin: '15px 0' }}>
-                  <LoaderItem>
-                    <Placeholder />
-                  </LoaderItem>
-                </Col>
-                <Col md={4} lg={3} sm={6} xs={12} style={{ margin: '15px 0' }}>
-                  <LoaderItem>
-                    <Placeholder />
-                  </LoaderItem>
-                </Col>
-                <Col md={4} lg={3} sm={6} xs={12} style={{ margin: '15px 0' }}>
-                  <LoaderItem>
-                    <Placeholder />
-                  </LoaderItem>
-                </Col>
-                <Col md={4} lg={3} sm={6} xs={12} style={{ margin: '15px 0' }}>
-                  <LoaderItem>
-                    <Placeholder />
-                  </LoaderItem>
-                </Col>
-              </>
-            )}
+            {images[0] && !isLoading
+              ? images.map((image: string, index: number) => {
+                  return (
+                    <Col
+                      md={4}
+                      lg={3}
+                      sm={6}
+                      xs={12}
+                      key={index}
+                      style={{ margin: '15px 0' }}
+                    >
+                      <Fade bottom duration={800} delay={index * 10}>
+                        <ProductCard
+                          title={content[index]}
+                          tag={tags[index]}
+                          image={image}
+                          index={imageNum[index]}
+                          data={image}
+                        />
+                      </Fade>
+                    </Col>
+                  );
+                })
+              : isLoading && (
+                  <>
+                    <Col
+                      md={4}
+                      lg={3}
+                      sm={6}
+                      xs={12}
+                      style={{ margin: '15px 0' }}
+                    >
+                      <LoaderItem>
+                        <Placeholder />
+                      </LoaderItem>
+                    </Col>
+                    <Col
+                      md={4}
+                      lg={3}
+                      sm={6}
+                      xs={12}
+                      style={{ margin: '15px 0' }}
+                    >
+                      <LoaderItem>
+                        <Placeholder />
+                      </LoaderItem>
+                    </Col>
+                    <Col
+                      md={4}
+                      lg={3}
+                      sm={6}
+                      xs={12}
+                      style={{ margin: '15px 0' }}
+                    >
+                      <LoaderItem>
+                        <Placeholder />
+                      </LoaderItem>
+                    </Col>
+                    <Col
+                      md={4}
+                      lg={3}
+                      sm={6}
+                      xs={12}
+                      style={{ margin: '15px 0' }}
+                    >
+                      <LoaderItem>
+                        <Placeholder />
+                      </LoaderItem>
+                    </Col>
+                  </>
+                )}
           </Row>
         </Col>
       </Row>
