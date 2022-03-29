@@ -37,6 +37,7 @@ export default function Posts() {
   useEffect(() => {
     if (search?.length === 0) {
       setImages([]);
+      setIsLoading(true);
     }
   }, [search]);
 
@@ -202,7 +203,7 @@ export default function Posts() {
               </Row>
             </Col>
           </Header>
-          {!isLoading && images.length === 0 && <NoResult />}
+          {!isLoading && images.length === 0 && <NoResult hideButton={false} />}
           <Row>
             {images[0] && !isLoading
               ? images.map((image: string, index: number) => {
