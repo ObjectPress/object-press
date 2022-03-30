@@ -105,6 +105,10 @@ export default function Posts() {
     setSelectedBlog([]);
   };
 
+  const handleSearchKeyPress = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') handleSearch();
+  };
+
   const handleBlog = async ({ value }) => {
     if (value.length) {
       const posts = ((await dispatch(searchPostsByBlog(value[0].id))) as any)
@@ -199,6 +203,7 @@ export default function Posts() {
                 <Col md={4} lg={5}>
                   <Input
                     value={search}
+                    onKeyPress={handleSearchKeyPress}
                     placeholder="Search By Post Title"
                     onChange={(e) => setSearch(e.target.value)}
                     clearable
