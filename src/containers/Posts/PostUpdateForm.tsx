@@ -407,7 +407,6 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
               </DrawerBox>
             </Col>
           </Row>
-
         </Scrollbars>
 
         <ButtonGroup>

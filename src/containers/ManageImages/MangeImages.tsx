@@ -25,7 +25,14 @@ const ManageImages: React.FC<Props> = ({ onClose }) => {
       <Scrollbars
         autoHide
         renderView={(props) => (
-          <div {...props} style={{ ...props.style, overflowX: 'hidden' }} />
+          <div
+            {...props}
+            style={{
+              ...props.style,
+              overflowX: 'hidden',
+              height: 'calc(100% - 120px)',
+            }}
+          />
         )}
         renderTrackHorizontal={(props) => (
           <div

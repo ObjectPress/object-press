@@ -2,6 +2,7 @@ import {
   createAsyncThunk,
   createSelector,
   createSlice,
+  PayloadAction,
 } from '@reduxjs/toolkit';
 import { Post, PostState, NewPost, UpdatePost } from 'types';
 // API imports
@@ -168,16 +169,41 @@ export const searchPostsByBlog = createAsyncThunk<Post[], string>(
   }
 );
 
+const initialNewPostState: NewPost = {
+  appId: '',
+  post: {
+    title: '',
+    publishAt: '',
+    content: '',
+    pageTitle: '',
+    slug: '',
+    keywords: '',
+    description: '',
+    images: [],
+    altTags: [],
+  },
+  active: undefined,
+};
+
 export const initialState: PostState = {
   posts: [],
   loading: false,
   error: undefined,
+  newPost: initialNewPostState,
 };
 
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {},
+  reducers: {
+    setNewPost: (state: PostState, action: PayloadAction<NewPost>) => {
+      const post = action.payload;
+      state.newPost = post;
+    },
+    clearNewPost: (state: PostState) => {
+      state.newPost = initialNewPostState;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchPosts.pending, (state, { payload }) => {
       state.error = undefined;
@@ -237,6 +263,8 @@ const postsSlice = createSlice({
   },
 });
 
+export const { setNewPost, clearNewPost } = postsSlice.actions;
+
 export const postsStateSelector = (state: RootState) => state.posts;
 
 export const postsSelector = () =>
@@ -244,5 +272,8 @@ export const postsSelector = () =>
 
 export const postsLoadingSelector = () =>
   createSelector(postsStateSelector, (state) => state.loading);
+
+export const savedNewPostSelector = () =>
+  createSelector(postsStateSelector, (state) => state.newPost);
 
 export default postsSlice.reducer;

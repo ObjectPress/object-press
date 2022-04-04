@@ -24,7 +24,12 @@ import { slugify } from 'utils';
 import { addNewImage } from 'services/apiServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { blogsSelector, fetchBlogs } from 'store/blogs';
-import { addPost } from 'store/posts';
+import {
+  addPost,
+  clearNewPost,
+  savedNewPostSelector,
+  setNewPost,
+} from 'store/posts';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import useFormControl from '../../hooks/useFormControl';
@@ -36,6 +41,7 @@ import {
 import { FormControl } from 'baseui/form-control';
 import { CloseDrawer } from 'containers/DrawerItems/DrawerItems';
 import { CustomSelect } from 'components/Select/CustomSelect';
+import { NewPost } from 'types';
 
 interface Props {
   onClose: CloseDrawer;
@@ -53,26 +59,72 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
   const [isMdEditorVisited, setIsMdEditorVisited] = useState<boolean>(false);
   const [active, setActive] = useState([]);
   const [uploads] = useState<File[]>([]);
-  const [altTags] = useState<string[]>(['']);
+  const [files, setFiles] = useState<File[]>([]);
+  const [altTags, setAltTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [blogId, setBlogId] = useState([]);
   const [keywords, setKeywords] = useState('');
   const [publishAt, setPublishAt] = useState(new Date());
+  const [blogsFetched, setBlogsFetched] = useState(false);
 
   const dispatch = useDispatch();
 
   const blogs = useSelector(blogsSelector());
-  const [blogsFetched, setBlogsFetched] = useState(false);
+  const savedFormData = useSelector(savedNewPostSelector());
 
-  // eslint-disable-next-line
+  const getFormValue = (imageUrls?: string[]): NewPost => ({
+    appId: blogId[0]?.id || '',
+    post: {
+      title: postTitle,
+      publishAt: publishAt.toISOString(),
+      content,
+      pageTitle,
+      slug: slugify(pageTitle),
+      keywords,
+      description: description,
+      images: imageUrls?.length ? imageUrls : [''],
+      altTags,
+    },
+    active: active[0]?.value || '',
+  });
+
+  const setFormValue = (form: NewPost) => {
+    setBlogId(
+      form.appId.length ? [blogs.find(({ id }) => id === form.appId)] : []
+    );
+    setActive(
+      form.active
+        ? [options.find((option) => option.value === form.active)]
+        : []
+    );
+    setPostTitle(form.post.title);
+    setPublishAt(
+      form.post.publishAt.length ? new Date(form.post.publishAt) : new Date()
+    );
+    setContent(form.post.content);
+    setPageTitle(form.post.pageTitle);
+    setSlug(form.post.slug);
+    setKeywords(form.post.keywords);
+    setDescription(form.post.description);
+  };
+
   const openDrawer = useCallback(() => {
+    dispatch(setNewPost(getFormValue()));
     drawerDispatch({
       type: 'OPEN_DRAWER',
       drawerComponent: 'MANAGE_IMAGES',
-      backUrl: '/posts',
-      newUrl: '/manage-post-images',
+      backUrl: '/new-post',
+      newUrl: '/manage-post-images/new',
     });
-  }, [drawerDispatch]);
+    // eslint-disable-next-line
+  }, [drawerDispatch, getFormValue]);
+
+  useEffect(() => {
+    const formData = savedFormData;
+
+    setFormValue(formData);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (!blogs?.length && !blogsFetched) {
@@ -87,6 +139,7 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
     onInputChangeHandler: onPostTitleChangeHandler,
     onInputBlurHandler: onPostTitleBlurHandler,
     shouldShowError: shouldPostTitleShowError,
+    setValue: setPostTitle,
   } = useFormControl(validatePostTitle);
   const {
     value: pageTitle,
@@ -94,6 +147,7 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
     onInputChangeHandler: onPageTitleChangeHandler,
     onInputBlurHandler: onPageTitleBlurHandler,
     shouldShowError: shouldPageTitleShowError,
+    setValue: setPageTitle,
   } = useFormControl(validatePageTitle);
   const {
     value: description,
@@ -101,6 +155,7 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
     onInputChangeHandler: onDescriptionChangeHandler,
     onInputBlurHandler: onDescriptionBlurHandler,
     shouldShowError: shouldDescriptionShowError,
+    setValue: setDescription,
   } = useFormControl(validateDescription);
 
   const isMdEditorValid = content.length > 0;
@@ -144,24 +199,11 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
 
         await dispatch(
           addPost({
-            post: {
-              appId: blogId[0].id,
-              post: {
-                title: postTitle,
-                publishAt: publishAt.toISOString(),
-                content,
-                pageTitle,
-                slug: slugify(pageTitle),
-                keywords,
-                description: description,
-                images: imageUrls?.length ? imageUrls : [''],
-                altTags,
-              },
-              active: active[0].value,
-            },
+            post: getFormValue(imageUrls),
           })
         );
 
+        dispatch(clearNewPost());
         onClose();
       } catch (e) {
         console.log(e);
@@ -175,7 +217,6 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
   };
 
   const handleBlogChange = ({ value }) => {
-    console.log(value);
     setBlogId(value);
   };
 
@@ -383,7 +424,6 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
               </DrawerBox>
             </Col>
           </Row>
-
         </Scrollbars>
 
         <ButtonGroup>

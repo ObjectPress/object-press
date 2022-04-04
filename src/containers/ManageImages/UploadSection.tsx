@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useStyletron } from 'baseui';
 
+import { FormControl } from 'baseui/form-control';
+
+import { FormFields, FormLabel } from 'components/FormFields/FormFields';
+import Input from 'components/Input/Input';
 import Button from 'components/Button/Button';
 import { Row, Col } from 'components/FlexBox/FlexBox';
 import DrawerBox from 'components/DrawerBox/DrawerBox';
@@ -8,8 +13,14 @@ import { FieldDetails } from '../DrawerItems/DrawerItems.style';
 
 export const UploadSection: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
+  const [altTags, setAltTags] = useState<string[]>([]);
+  const [css] = useStyletron();
 
-  useEffect(() => {}, [files]);
+  useEffect(() => {
+    setAltTags(files.map((file, index) => altTags[index] || ''));
+
+    //eslint-disable-next-line
+  }, [files]);
 
   const onUpload = (uploadedFiles: File[]) => {
     const file = uploadedFiles[0];
@@ -25,6 +36,13 @@ export const UploadSection: React.FC = () => {
     newFiles.splice(index, 1);
 
     setFiles(newFiles);
+  };
+
+  const altTagChange = (value: string, index: number) => {
+    const newAltTags = [...altTags];
+
+    newAltTags[index] = value;
+    setAltTags(newAltTags);
   };
 
   return (
@@ -59,7 +77,37 @@ export const UploadSection: React.FC = () => {
           <FieldDetails>Add your image alt tags here</FieldDetails>
         </Col>
         <Col lg={8}>
-          <DrawerBox></DrawerBox>
+          <DrawerBox>
+            <Row>
+              {files.map((file, index) => (
+                <React.Fragment key={index}>
+                  <Col xs={12} md={2}>
+                    <img
+                      className={css({ objectFit: 'cover' })}
+                      src={URL.createObjectURL(file)}
+                      alt={file.name}
+                      height="100%"
+                      width="100%"
+                    />
+                  </Col>
+                  <Col xs={12} md={10}>
+                    <FormFields>
+                      <FormLabel>Alt tag for image {index + 1}</FormLabel>
+                      <FormControl>
+                        <Input
+                          name={`Alt tag for image ${index + 1}`}
+                          value={altTags[index]}
+                          onChange={(event) =>
+                            altTagChange(event.target.value, index)
+                          }
+                        />
+                      </FormControl>
+                    </FormFields>
+                  </Col>
+                </React.Fragment>
+              ))}
+            </Row>
+          </DrawerBox>
         </Col>
         <Col lg={4}></Col>
         <Col lg={8}>

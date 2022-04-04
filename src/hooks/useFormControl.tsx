@@ -2,20 +2,26 @@ import { useCallback, useState } from 'react';
 import { FormControlHook } from 'types';
 
 const useFormControl: FormControlHook = (validationFunction) => {
-  const [value, setValue] = useState<string>('');
+  const [value, _setValue] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(false);
   const [isVisited, setIsVisited] = useState<boolean>(false);
 
-  const setInitialValue = useCallback(
-    (initialValue: string) => {
-      setValue(initialValue);
-      setIsValid(validationFunction(initialValue).isValid);
+  const setValue = useCallback(
+    (newValue) => {
+      setIsValid(validationFunction(newValue).isValid);
+      _setValue(newValue);
     },
     [validationFunction]
   );
 
+  const setInitialValue = useCallback(
+    (initialValue: string) => {
+      setValue(initialValue);
+    },
+    [setValue]
+  );
+
   function onInputChangeHandler(e) {
-    setIsValid(validationFunction(e.target.value).isValid);
     setValue(e.target.value);
   }
 
@@ -32,6 +38,7 @@ const useFormControl: FormControlHook = (validationFunction) => {
     onInputBlurHandler,
     shouldShowError,
     setInitialValue,
+    setValue,
   };
 };
 
