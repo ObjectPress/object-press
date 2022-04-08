@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useStyletron } from 'baseui';
 
 import { FormControl } from 'baseui/form-control';
@@ -11,31 +11,34 @@ import DrawerBox from 'components/DrawerBox/DrawerBox';
 import Uploader from 'components/Uploader/Uploader';
 import { FieldDetails } from '../DrawerItems/DrawerItems.style';
 
-export const UploadSection: React.FC = () => {
+interface Props {
+  onStartUpload: (files: File[], altTags: string[]) => Promise<void>;
+}
+
+export const UploadSection: React.FC<Props> = ({ onStartUpload }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [altTags, setAltTags] = useState<string[]>([]);
   const [css] = useStyletron();
-
-  useEffect(() => {
-    setAltTags(files.map((file, index) => altTags[index] || ''));
-
-    //eslint-disable-next-line
-  }, [files]);
+  const [uploading, setUploading] = useState(false);
 
   const onUpload = (uploadedFiles: File[]) => {
     const file = uploadedFiles[0];
 
     if (file) {
       setFiles([...files, file]);
+      setAltTags([...altTags, '']);
     }
   };
 
   const onRemove = (index: number) => {
     const newFiles = [...files];
+    const newAltTags = [...altTags];
 
     newFiles.splice(index, 1);
+    newAltTags.splice(index, 1);
 
     setFiles(newFiles);
+    setAltTags(newAltTags);
   };
 
   const altTagChange = (value: string, index: number) => {
@@ -43,6 +46,16 @@ export const UploadSection: React.FC = () => {
 
     newAltTags[index] = value;
     setAltTags(newAltTags);
+  };
+
+  const onUploadServer = async () => {
+    setUploading(true);
+    setFiles([]);
+    setAltTags([]);
+
+    await onStartUpload(files, altTags);
+
+    setUploading(false);
   };
 
   return (
@@ -69,7 +82,12 @@ export const UploadSection: React.FC = () => {
               },
             }}
           >
-            <Uploader files={files} onRemove={onRemove} onUpload={onUpload} />
+            <Uploader
+              files={files}
+              onRemove={onRemove}
+              onUpload={onUpload}
+              disabled={uploading}
+            />
           </DrawerBox>
         </Col>
 
@@ -123,6 +141,12 @@ export const UploadSection: React.FC = () => {
                 }),
               },
             }}
+            onClick={onUploadServer}
+            disabled={
+              !files.length ||
+              altTags.findIndex((tag) => !tag.length) !== -1 ||
+              uploading
+            }
           >
             Upload
           </Button>

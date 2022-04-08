@@ -23,7 +23,13 @@ import {
 import { slugify } from 'utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { blogsSelector, fetchBlogs } from 'store/blogs';
-import { editPost, fetchPost } from 'store/posts';
+import {
+  clearEditingPost,
+  editPost,
+  fetchPost,
+  savedEditingPostSelector,
+  setEditingPost,
+} from 'store/posts';
 import { Post } from 'types';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -54,11 +60,9 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
   const [content, setContent] = useState<string>('');
   const [isMdEditorVisited, setIsMdEditorVisited] = useState<boolean>(false);
   const [active, setActive] = useState([]);
-  const [altTags, setAltTags] = useState<string[]>(['']);
   const [loading, setLoading] = useState(false);
   const [blogId, setBlogId] = useState([]);
   const [keywords, setKeywords] = useState('');
-  const [images, setImages] = useState<string[]>(['']);
   const [publishDate, setPublishDate] = useState<any>(new Date());
 
   const dispatch = useDispatch();
@@ -66,14 +70,32 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
   const blogs = useSelector(blogsSelector());
   const [blogsFetched, setBlogsFetched] = useState(false);
 
+  const savedFormData = useSelector(savedEditingPostSelector());
+
   const openDrawer = useCallback(() => {
     drawerDispatch({
       type: 'OPEN_DRAWER',
       drawerComponent: 'MANAGE_IMAGES',
-      backUrl: '/posts',
+      backUrl: `/update-post/${id}`,
       newUrl: `/manage-post-images/${id}`,
     });
   }, [drawerDispatch, id]);
+
+  const setForm = useCallback(({ post, active, appId }: Post) => {
+    const { title, publishAt, pageTitle, description, keywords, content } =
+      post;
+
+    setInitialPostTitle(title);
+    setPublishDate(new Date(publishAt));
+    setInitialPageTitle(pageTitle);
+    setSlug(slugify(pageTitle));
+    setContent(content);
+    setInitialDescription(description);
+    setActive(options.filter((o) => o.value === active));
+    setKeywords(keywords);
+    setBlogId(blogs.filter((b) => b.id === appId));
+    //eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (!blogs.length && !blogsFetched) {
@@ -83,11 +105,15 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
   }, [dispatch, blogs, blogsFetched]);
 
   useEffect(() => {
-    if (blogs?.length) {
+    if (blogs.length && savedFormData._id !== id) {
       _fetchPost();
     }
     //eslint-disable-next-line
-  }, [blogs]);
+  }, [blogs, savedFormData, id]);
+
+  useEffect(() => {
+    if (savedFormData._id === id) setForm(savedFormData);
+  }, [savedFormData, setForm, id]);
 
   const _fetchPost = async () => {
     const post = ((await dispatch(fetchPost(id))) as any).payload as
@@ -95,28 +121,7 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
       | undefined;
 
     if (post) {
-      const {
-        title,
-        publishAt,
-        pageTitle,
-        content,
-        description,
-        keywords,
-        images,
-        altTags,
-      } = post.post;
-
-      setInitialPostTitle(title);
-      setPublishDate(new Date(publishAt));
-      setInitialPageTitle(pageTitle);
-      setSlug(slugify(pageTitle));
-      setContent(content);
-      setInitialDescription(description);
-      setActive(options.filter((o) => o.value === post.active));
-      setKeywords(keywords);
-      setBlogId(blogs.filter((b) => b.id === post.appId));
-      setImages(images);
-      setAltTags(altTags);
+      dispatch(setEditingPost(post));
     }
   };
 
@@ -180,14 +185,15 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
                 slug: slugify(newPageTitle),
                 keywords,
                 description: newDescription,
-                images: images?.length ? images : [''],
-                altTags: altTags?.length ? altTags : [''],
+                images: savedFormData.post.images,
+                altTags: savedFormData.post.altTags,
               },
               active: active[0].value,
             },
           })
         );
 
+        dispatch(clearEditingPost());
         onClose();
       } catch (e) {
         console.log(e);

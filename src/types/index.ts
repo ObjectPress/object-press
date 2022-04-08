@@ -143,6 +143,7 @@ export type PostState = {
   loading: boolean;
   error?: string;
   newPost: NewPost;
+  editingPost: Post;
 };
 
 /**
@@ -187,4 +188,9 @@ export interface FormControlHook {
     setInitialValue: (initialValue: string) => void;
     setValue: (newValue: string) => void;
   };
+}
+
+export interface ImageData {
+  src: string;
+  alt: string;
 }

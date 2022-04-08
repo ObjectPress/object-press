@@ -185,11 +185,31 @@ const initialNewPostState: NewPost = {
   active: undefined,
 };
 
+const initialEditingPostState: Post = {
+  _id: '',
+  appId: '',
+  active: undefined,
+  createDate: '',
+  modifiedDate: '',
+  post: {
+    title: '',
+    publishAt: '',
+    content: '',
+    pageTitle: '',
+    slug: '',
+    keywords: '',
+    description: '',
+    images: [],
+    altTags: [],
+  },
+};
+
 export const initialState: PostState = {
   posts: [],
   loading: false,
   error: undefined,
   newPost: initialNewPostState,
+  editingPost: initialEditingPostState,
 };
 
 const postsSlice = createSlice({
@@ -202,6 +222,13 @@ const postsSlice = createSlice({
     },
     clearNewPost: (state: PostState) => {
       state.newPost = initialNewPostState;
+    },
+    setEditingPost: (state: PostState, action: PayloadAction<Post>) => {
+      const post = action.payload;
+      state.editingPost = post;
+    },
+    clearEditingPost: (state: PostState) => {
+      state.editingPost = initialEditingPostState;
     },
   },
   extraReducers: (builder) => {
@@ -263,7 +290,8 @@ const postsSlice = createSlice({
   },
 });
 
-export const { setNewPost, clearNewPost } = postsSlice.actions;
+export const { setNewPost, clearNewPost, setEditingPost, clearEditingPost } =
+  postsSlice.actions;
 
 export const postsStateSelector = (state: RootState) => state.posts;
 
@@ -275,5 +303,8 @@ export const postsLoadingSelector = () =>
 
 export const savedNewPostSelector = () =>
   createSelector(postsStateSelector, (state) => state.newPost);
+
+export const savedEditingPostSelector = () =>
+  createSelector(postsStateSelector, (state) => state.editingPost);
 
 export default postsSlice.reducer;

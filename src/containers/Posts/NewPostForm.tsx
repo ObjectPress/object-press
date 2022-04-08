@@ -21,7 +21,6 @@ import {
   ButtonGroup,
 } from '../DrawerItems/DrawerItems.style';
 import { slugify } from 'utils';
-import { addNewImage } from 'services/apiServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { blogsSelector, fetchBlogs } from 'store/blogs';
 import {
@@ -58,9 +57,6 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
   const [content, setContent] = useState<string>('');
   const [isMdEditorVisited, setIsMdEditorVisited] = useState<boolean>(false);
   const [active, setActive] = useState([]);
-  const [uploads] = useState<File[]>([]);
-  const [files, setFiles] = useState<File[]>([]);
-  const [altTags, setAltTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [blogId, setBlogId] = useState([]);
   const [keywords, setKeywords] = useState('');
@@ -72,7 +68,7 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
   const blogs = useSelector(blogsSelector());
   const savedFormData = useSelector(savedNewPostSelector());
 
-  const getFormValue = (imageUrls?: string[]): NewPost => ({
+  const getFormValue = (): NewPost => ({
     appId: blogId[0]?.id || '',
     post: {
       title: postTitle,
@@ -82,8 +78,8 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
       slug: slugify(pageTitle),
       keywords,
       description: description,
-      images: imageUrls?.length ? imageUrls : [''],
-      altTags,
+      images: savedFormData.post.images,
+      altTags: savedFormData.post.altTags,
     },
     active: active[0]?.value || '',
   });
@@ -179,27 +175,11 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
 
     setLoading(true);
 
-    const imageUrls: string[] = [];
-    const stamp = Date.now();
-
     if (isFormValid) {
       try {
-        for (const file of uploads) {
-          const formData = new FormData();
-          let name = `${stamp}/${file.name}`;
-
-          formData.append(name, file);
-
-          // Send this form data to a Rest API
-          await addNewImage(formData);
-
-          let path = `https://share.objectpress.io/${name}`;
-          imageUrls.push(path);
-        }
-
         await dispatch(
           addPost({
-            post: getFormValue(imageUrls),
+            post: getFormValue(),
           })
         );
 

@@ -100,7 +100,7 @@ export default function DrawerItems() {
         },
       }}
     >
-      <SpecificContent onClose={closeDrawer} data={data} />
+      <SpecificContent onClose={closeDrawer} data={data[data.length - 1]} />
     </Drawer>
   );
 }

@@ -9,6 +9,7 @@ interface Props {
   onRemove: (index: number) => void;
   multiple?: boolean;
   max?: number;
+  disabled?: boolean;
 }
 
 const Text = styled('span', ({ $theme }) => ({
@@ -103,8 +104,10 @@ const Uploader: FC<Props> = ({
   onRemove,
   multiple = false,
   max = 5,
+  disabled = false,
 }) => {
   const { getRootProps, getInputProps } = useDropzone({
+    disabled,
     accept: 'image/*',
     multiple,
     onDrop: useCallback(
