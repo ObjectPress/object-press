@@ -191,6 +191,7 @@ export interface FormControlHook {
 }
 
 export interface ImageData {
+  title: string;
   src: string;
   alt: string;
 }

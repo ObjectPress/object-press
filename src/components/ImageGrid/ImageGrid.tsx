@@ -54,7 +54,7 @@ export const ImageGrid: FC<Props> = ({ images, loading = false }) => {
     );
   return (
     <Row>
-      {images.map(({ src, alt }, index) => (
+      {images.map(({ src, alt, title }, index) => (
         <Col key={index} {...colProps}>
           <ImageContainer>
             {src === 'UPLOADING' ? (
@@ -62,7 +62,8 @@ export const ImageGrid: FC<Props> = ({ images, loading = false }) => {
             ) : (
               <>
                 <Image url={src} alt={alt} style={{ width: '100%' }} />
-                <AltTag>{alt}</AltTag>
+                <AltTag>Post title: {title}</AltTag>
+                <AltTag>Alt tag: {alt}</AltTag>
                 <ButtonContainer
                   className={css({
                     width: '100%',

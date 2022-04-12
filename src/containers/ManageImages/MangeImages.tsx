@@ -129,6 +129,7 @@ const ManageImages: React.FC<Props> = ({ onClose }) => {
 
         <ImageGrid
           images={currentPost.post.images.map((src, index) => ({
+            title: currentPost.post.title,
             src,
             alt: currentPost.post.altTags[index],
           }))}
