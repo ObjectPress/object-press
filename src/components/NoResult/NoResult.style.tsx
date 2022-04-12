@@ -7,13 +7,6 @@ export const NoResultWrapper = styled('div', () => ({
   alignItems: 'center',
   padding: '50px 20px',
 
-  h3: {
-    fontSize: '24px',
-    fontWeight: 700,
-    color: '#161f6a',
-    margin: '0 0 15px',
-  },
-
   p: {
     fontSize: '16px',
     fontWeight: 400,

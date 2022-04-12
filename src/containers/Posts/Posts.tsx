@@ -78,7 +78,9 @@ export default function Posts() {
   }
 
   useEffect(() => {
-    if (!postsFetched || search?.length === 0 || !isOpen) {
+    if (!postsFetched || search?.length === 0) {
+      getPosts();
+    } else if (!isOpen && search?.length === 0) {
       getPosts();
     }
     // eslint-disable-next-line

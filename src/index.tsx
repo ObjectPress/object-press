@@ -14,6 +14,8 @@ import { client } from 'graphql/client';
 import { BrowserRouter } from 'react-router-dom';
 import Routes from 'routes';
 // styles
+import 'theme/reset.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { LightTheme } from 'theme';
 // aws
 import Amplify from 'aws-amplify';

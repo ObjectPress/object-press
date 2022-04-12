@@ -6,7 +6,6 @@ import {
   Image,
   ProductTitle,
   ProductMeta,
-  OrderID,
   ProductPriceWrapper,
   ProductPrice,
 } from './ProductCard.style';
@@ -41,7 +40,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </ProductPrice>
           </ProductPriceWrapper>
 
-          <OrderID>Image: {index}</OrderID>
+          {/*<OrderID>Image: {index}</OrderID>*/}
         </ProductMeta>
       </ProductInfo>
     </ProductCardWrapper>
