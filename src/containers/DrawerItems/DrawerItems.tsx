@@ -16,6 +16,7 @@ import NewGalleryForm from 'containers/Gallery/NewGalleryForm';
 import UpdateGalleryForm from 'containers/Gallery/UpdateGalleryForm';
 
 import { CloseButton } from './DrawerItems.style';
+import AddGalleryImage from 'containers/Gallery/AddGalleryImage';
 
 export type CloseDrawer = () => void;
 
@@ -29,6 +30,7 @@ const DRAWER_COMPONENTS = {
   SIDEBAR: Sidebar,
   GALLERY_FORM: NewGalleryForm,
   GALLERY_UPDATE_FORM: UpdateGalleryForm,
+  ADD_GALLERY_IMAGE: AddGalleryImage,
 };
 
 export default function DrawerItems() {

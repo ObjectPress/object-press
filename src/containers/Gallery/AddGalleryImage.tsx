@@ -131,7 +131,7 @@ const AddGalleryImage: React.FC<Props> = ({ onClose }) => {
   return (
     <>
       <DrawerTitleWrapper>
-        <DrawerTitle>Update Gallery</DrawerTitle>
+        <DrawerTitle>Add Gallery Image</DrawerTitle>
       </DrawerTitleWrapper>
 
       <Form
@@ -176,9 +176,7 @@ const AddGalleryImage: React.FC<Props> = ({ onClose }) => {
           {selectedGallery[0]?.id && (
             <Row>
               <Col lg={4}>
-                <FieldDetails>
-                  Update your gallery description here
-                </FieldDetails>
+                <FieldDetails>Add your image here</FieldDetails>
               </Col>
 
               <Col lg={8}>

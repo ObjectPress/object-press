@@ -35,6 +35,15 @@ export default function Posts() {
     });
   };
 
+  const handleAddImage = async () => {
+    drawerDispatch({
+      type: 'OPEN_DRAWER',
+      drawerComponent: 'ADD_GALLERY_IMAGE',
+      backUrl: '/gallery',
+      newUrl: `/new-image`,
+    });
+  };
+
   const dispatch = useDispatch();
   const [selectedGallery, setSelectedGallery] = useState([]);
   const [galleriesFetched, setGalleriesFetched] = useState(false);
@@ -158,7 +167,7 @@ export default function Posts() {
 
                 <Col md={3} lg={3}>
                   <Button
-                    onClick={handleUpdate}
+                    onClick={handleAddImage}
                     startEnhancer={() => (
                       <i className="fas fa-camera" aria-label="add image" />
                     )}
