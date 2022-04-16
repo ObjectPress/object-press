@@ -9,7 +9,7 @@ import { Auth } from 'aws-amplify';
 import { onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { useMutation } from '@apollo/client';
 import { LOGIN_MUTATION } from 'graphql/mutations';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { AuthContext } from 'context/auth';
 import Topbar from './Topbar/Topbar';
 import Footer from './Footer/Footer';
@@ -18,6 +18,7 @@ import './styles/index.css';
 export default function Login() {
   const [login] = useMutation(LOGIN_MUTATION);
   const { isAuthenticated } = useContext(AuthContext);
+  const history = useHistory();
 
   async function emailSession() {
     try {
@@ -34,8 +35,7 @@ export default function Login() {
 
       if (data?.loginUser?.accessToken) {
         localStorage.setItem('op-access-token', data.loginUser.accessToken);
-
-        window.location.reload();
+        history.go(0);
       }
     } catch (error) {
       console.log(error);

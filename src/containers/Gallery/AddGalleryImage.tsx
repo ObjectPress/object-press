@@ -33,7 +33,7 @@ interface Props {
   onClose: CloseDrawer;
 }
 
-const UpdateGalleryForm: React.FC<Props> = ({ onClose }) => {
+const AddGalleryImage: React.FC<Props> = ({ onClose }) => {
   const dispatch = useDispatch();
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [selectedGallery, setSelectedGallery] = useState([]);
@@ -338,4 +338,4 @@ const UpdateGalleryForm: React.FC<Props> = ({ onClose }) => {
   );
 };
 
-export default UpdateGalleryForm;
+export default AddGalleryImage;

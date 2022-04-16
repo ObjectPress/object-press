@@ -80,7 +80,9 @@ export default function Posts() {
   }
 
   useEffect(() => {
-    if (!postsFetched || search?.length === 0 || !isOpen) {
+    if (!postsFetched || search?.length === 0) {
+      getPosts();
+    } else if (!isOpen && search?.length === 0) {
       getPosts();
     }
     // eslint-disable-next-line
@@ -105,6 +107,10 @@ export default function Posts() {
 
     setSearch(value);
     setSelectedBlog([]);
+  };
+
+  const handleSearchKeyPress = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') handleSearch();
   };
 
   const handleBlog = async ({ value }) => {
@@ -197,6 +203,7 @@ export default function Posts() {
                 <Col md={3} lg={3}>
                   <Input
                     value={search}
+                    onKeyPress={handleSearchKeyPress}
                     placeholder="Search By Post Title"
                     onChange={(e) => setSearch(e.target.value)}
                     clearable

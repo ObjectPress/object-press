@@ -81,7 +81,7 @@ export default function Posts() {
     if (value[0]?.blog) {
       await handleBlog(value);
     } else if (value[0]?.blog === false) {
-      alert(value[0]?.blog);
+      // alert(value[0]?.blog);
     }
 
     setSelectedGallery(value);

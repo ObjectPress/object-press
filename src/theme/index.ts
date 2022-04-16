@@ -1,5 +1,3 @@
-import 'theme/reset.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import { createTheme, lightThemePrimitives } from 'baseui';
 
 export const LightTheme = createTheme(
