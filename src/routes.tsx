@@ -52,53 +52,76 @@ const Routes = () => {
     <AuthProvider>
       <Suspense fallback={<InLineLoader />}>
         <Switch>
-          <AdminLayout>
-            <PrivateRoute exact={true} path="/dashboard">
+          <PrivateRoute exact={true} path="/dashboard">
+            <AdminLayout>
               <Dashboard />
-            </PrivateRoute>
-            <PrivateRoute path="/posts">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/posts">
+            <AdminLayout>
               <Posts />
-            </PrivateRoute>
-            <PrivateRoute path="/new-post">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/new-post">
+            <AdminLayout>
               <Posts />
-            </PrivateRoute>
-            <PrivateRoute path="/update-post/:id">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/update-post/:id">
+            <AdminLayout>
               <Posts />
-            </PrivateRoute>
-            <PrivateRoute path="/gallery">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/gallery">
+            <AdminLayout>
               <Gallery />
-            </PrivateRoute>
-            <PrivateRoute path="/new-gallery">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/new-gallery">
+            <AdminLayout>
               <Gallery />
-            </PrivateRoute>
-            <PrivateRoute path="/update-gallery">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/update-gallery">
+            <AdminLayout>
               <Gallery />
-            </PrivateRoute>
-            <PrivateRoute path="/new-image">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/upload">
+            <AdminLayout>
               <Gallery />
-            </PrivateRoute>
-            <PrivateRoute path="/upload">
-              <Gallery />
-            </PrivateRoute>
-            <PrivateRoute path="/blogs">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/blogs">
+            <AdminLayout>
               <Blogs />
-            </PrivateRoute>
-            <PrivateRoute path="/new-blog">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/new-blog">
+            <AdminLayout>
               <Blogs />
-            </PrivateRoute>
-            <PrivateRoute path="/update-blog/:id">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/update-blog/:id">
+            <AdminLayout>
               <Blogs />
-            </PrivateRoute>
-            <PrivateRoute path="/settings">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/settings">
+            <AdminLayout>
               <Settings />
-            </PrivateRoute>
-            <PrivateRoute path="/profile">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/profile">
+            <AdminLayout>
               <Settings />
-            </PrivateRoute>
-            <PrivateRoute path="/credentials">
+            </AdminLayout>
+          </PrivateRoute>
+          <PrivateRoute path="/credentials">
+            <AdminLayout>
               <Settings />
-            </PrivateRoute>
-          </AdminLayout>
+            </AdminLayout>
+          </PrivateRoute>
 
           <Route path="/">
             <Login /> <Redirect from="/" to="/" />
