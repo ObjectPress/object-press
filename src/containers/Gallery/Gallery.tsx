@@ -14,6 +14,7 @@ import Placeholder from 'components/Placeholder/Placeholder';
 import { Button } from 'baseui/button';
 import { useDrawerDispatch, useDrawerState } from 'context/DrawerContext';
 import { mapBlogImages } from 'utils';
+import NoResult from 'components/NoResult/NoResult';
 
 export default function Posts() {
   const drawerDispatch = useDrawerDispatch();
@@ -52,6 +53,7 @@ export default function Posts() {
   const [content, setContent] = useState<string[]>(['']);
   const [tags, setTags] = useState<string[]>(['']);
   const [imageNum, setImageNum] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const isOpen = useDrawerState('isOpen');
 
   async function getGalleries() {
@@ -82,15 +84,19 @@ export default function Posts() {
       setContent(gallery.postArr);
       setImageNum(gallery.count);
     }
+
+    setIsLoading(false);
   }
 
   const handleSearch = async ({ value }) => {
     setImages(['']);
-
+    setIsLoading(true);
     if (value[0]?.blog) {
       await handleBlog(value);
+      setIsLoading(false);
     } else if (value[0]?.blog === false) {
       // alert(value[0]?.blog);
+      // setIsLoading(false);
     }
 
     setSelectedGallery(value);
@@ -191,8 +197,11 @@ export default function Posts() {
             </Col>
           </Header>
 
+          {!isLoading && images.length === 0 && <NoResult hideButton={false} />}
+
           <Row>
-            {images[0] ? (
+            {!isLoading &&
+              images[0] &&
               images.map((image: string, index: number) => {
                 return (
                   <Col
@@ -214,8 +223,9 @@ export default function Posts() {
                     </Fade>
                   </Col>
                 );
-              })
-            ) : (
+              })}
+
+            {isLoading && (
               <>
                 <Col md={4} lg={3} sm={6} xs={12} style={{ margin: '15px 0' }}>
                   <LoaderItem>
