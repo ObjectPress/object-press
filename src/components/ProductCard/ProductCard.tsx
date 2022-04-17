@@ -1,4 +1,7 @@
-import React from 'react';
+import { useMutation } from '@apollo/client';
+import { Button, KIND } from 'baseui/button';
+import { REMOVE_GALLERY_IMAGE_MUTATION } from 'graphql/mutations';
+import React, { useState } from 'react';
 import {
   ProductCardWrapper,
   ProductImageWrapper,
@@ -11,37 +14,112 @@ import {
 } from './ProductCard.style';
 
 type ProductCardProps = {
-  title: string;
-  tag: string;
+  title?: string;
+  tag?: string;
   image: string;
-  index: number;
-  data: any;
+  gallery: boolean;
+  id: string;
+  setGalleriesFetched: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({
-  title,
-  tag,
+  title = '',
+  tag = '',
   image,
-  index,
-  data,
+  gallery,
+  id = '',
+  setGalleriesFetched,
   ...props
 }) => {
+  const [removeImage] = useMutation(REMOVE_GALLERY_IMAGE_MUTATION);
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
+  async function handleRemove() {
+    setShowConfirm(true);
+  }
+
+  async function deleteGallery() {
+    await removeImage({
+      variables: {
+        image: {
+          image: image,
+          galleryId: id,
+        },
+      },
+    });
+
+    setGalleriesFetched(false);
+  }
+
   return (
     <ProductCardWrapper {...props}>
       <ProductImageWrapper>
         <Image url={image} />
       </ProductImageWrapper>
       <ProductInfo>
-        <ProductTitle>{`Post Title: '${title}'`}</ProductTitle>
-        <ProductMeta>
-          <ProductPriceWrapper>
-            <ProductPrice>
-              {tag?.length > 0 ? `Alt Tag: '${tag}'` : `Alt Tag: ?`}
-            </ProductPrice>
-          </ProductPriceWrapper>
+        <ProductTitle>{title ? `Post Title: '${title}'` : ''}</ProductTitle>
+        {!gallery && (
+          <ProductMeta>
+            <ProductPriceWrapper>
+              <ProductPrice>
+                {tag?.length > 0 ? `Alt Tag: '${tag}'` : `Alt Tag: ?`}
+              </ProductPrice>
+            </ProductPriceWrapper>
+          </ProductMeta>
+        )}
 
-          {/*<OrderID>Image: {index}</OrderID>*/}
-        </ProductMeta>
+        {gallery && (
+          <ProductMeta>
+            {showConfirm ? (
+              <Button
+                kind={KIND.minimal}
+                onClick={deleteGallery}
+                type="button"
+                overrides={{
+                  BaseButton: {
+                    style: ({ $theme }) => ({
+                      width: '100%',
+                      borderTopLeftRadius: '3px',
+                      borderTopRightRadius: '3px',
+                      borderBottomRightRadius: '3px',
+                      borderBottomLeftRadius: '3px',
+                      color: $theme.colors.red400,
+                    }),
+                  },
+                }}
+              >
+                Confirm
+                <i
+                  className="fas fa-exclamation-triangle"
+                  style={{ marginLeft: '15px', color: '#666D92' }}
+                />
+              </Button>
+            ) : (
+              <Button
+                kind={KIND.minimal}
+                onClick={handleRemove}
+                type="button"
+                overrides={{
+                  BaseButton: {
+                    style: ({ $theme }) => ({
+                      width: '100%',
+                      borderTopLeftRadius: '3px',
+                      borderTopRightRadius: '3px',
+                      borderBottomRightRadius: '3px',
+                      borderBottomLeftRadius: '3px',
+                      color: $theme.colors.red400,
+                    }),
+                  },
+                }}
+              >
+                Remove
+                <i
+                  className="fas fa-trash"
+                  style={{ marginLeft: '15px', color: '#666D92' }}
+                />
+              </Button>
+            )}
+          </ProductMeta>
+        )}
       </ProductInfo>
     </ProductCardWrapper>
   );

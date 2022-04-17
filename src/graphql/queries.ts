@@ -174,6 +174,7 @@ export const GALLERY_QUERY = gql`
       id
       name
       description
+      images
     }
   }
 `;

@@ -7,7 +7,7 @@ import { LoaderItem, Row, Col } from './Gallery.style';
 import { useDispatch } from 'react-redux';
 import { searchPostsByBlog } from 'store/posts';
 import { GalleryList, Post } from 'types';
-import { fetchGalleries } from 'store/galleries';
+import { fetchGalleries, fetchGallery } from 'store/galleries';
 import Fade from 'react-reveal/Fade';
 import ProductCard from 'components/ProductCard/ProductCard';
 import Placeholder from 'components/Placeholder/Placeholder';
@@ -27,23 +27,23 @@ export default function Posts() {
     });
   }, [drawerDispatch]);
 
-  const handleUpdate = async () => {
+  const handleUpdate = useCallback(() => {
     drawerDispatch({
       type: 'OPEN_DRAWER',
       drawerComponent: 'GALLERY_UPDATE_FORM',
       backUrl: '/gallery',
       newUrl: `/update-gallery`,
     });
-  };
+  }, [drawerDispatch]);
 
-  const handleAddImage = async () => {
+  const handleAddImage = useCallback(() => {
     drawerDispatch({
       type: 'OPEN_DRAWER',
       drawerComponent: 'ADD_GALLERY_IMAGE',
       backUrl: '/gallery',
-      newUrl: `/new-image`,
+      newUrl: `/add-image`,
     });
-  };
+  }, [drawerDispatch]);
 
   const dispatch = useDispatch();
   const [selectedGallery, setSelectedGallery] = useState([]);
@@ -52,8 +52,8 @@ export default function Posts() {
   const [images, setImages] = useState<string[]>(['']);
   const [content, setContent] = useState<string[]>(['']);
   const [tags, setTags] = useState<string[]>(['']);
-  const [imageNum, setImageNum] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isGallery, setIsGallery] = useState<boolean>(false);
   const isOpen = useDrawerState('isOpen');
 
   async function getGalleries() {
@@ -67,6 +67,8 @@ export default function Posts() {
 
   useEffect(() => {
     if (!galleriesFetched || !isOpen) {
+      setIsLoading(true);
+      setSelectedGallery([]);
       getGalleries();
     }
     // eslint-disable-next-line
@@ -80,9 +82,23 @@ export default function Posts() {
 
     if (gallery?.gallery) {
       setImages(gallery.gallery);
+      setIsGallery(false);
       setTags(gallery.altTags);
       setContent(gallery.postArr);
-      setImageNum(gallery.count);
+    }
+
+    setIsLoading(false);
+  }
+
+  async function handleGallery(value) {
+    let galleryList = ((await dispatch(fetchGallery(value[0].id))) as any)
+      .payload as GalleryList;
+
+    if (galleryList.images[0]) {
+      setImages(galleryList.images);
+      setIsGallery(true);
+      setTags([]);
+      setContent([]);
     }
 
     setIsLoading(false);
@@ -93,10 +109,8 @@ export default function Posts() {
     setIsLoading(true);
     if (value[0]?.blog) {
       await handleBlog(value);
-      setIsLoading(false);
     } else if (value[0]?.blog === false) {
-      // alert(value[0]?.blog);
-      // setIsLoading(false);
+      await handleGallery(value);
     }
 
     setSelectedGallery(value);
@@ -198,7 +212,6 @@ export default function Posts() {
           </Header>
 
           {!isLoading && images.length === 0 && <NoResult hideButton={false} />}
-
           <Row>
             {!isLoading &&
               images[0] &&
@@ -214,11 +227,12 @@ export default function Posts() {
                   >
                     <Fade bottom duration={800} delay={index * 10}>
                       <ProductCard
-                        title={content[index]}
-                        tag={tags[index]}
+                        title={content[0] && content[index]}
+                        tag={tags[0] && tags[index]}
                         image={image}
-                        index={imageNum[index]}
-                        data={image}
+                        gallery={isGallery}
+                        id={selectedGallery[0]?.id}
+                        setGalleriesFetched={setGalleriesFetched}
                       />
                     </Fade>
                   </Col>

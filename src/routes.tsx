@@ -82,6 +82,11 @@ const Routes = () => {
               <Gallery />
             </AdminLayout>
           </PrivateRoute>
+          <PrivateRoute path="/add-image">
+            <AdminLayout>
+              <Gallery />
+            </AdminLayout>
+          </PrivateRoute>
           <PrivateRoute path="/update-gallery">
             <AdminLayout>
               <Gallery />

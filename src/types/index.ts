@@ -57,6 +57,7 @@ export interface GalleryList {
   name: string;
   description: string;
   blog: boolean;
+  images: string[];
 }
 
 /**

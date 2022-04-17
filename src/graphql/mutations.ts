@@ -102,20 +102,23 @@ export const UPDATE_GALLERY_MUTATION = gql`
   }
 `;
 
-// update gallery
+// remove gallery
 export const REMOVE_GALLERY_MUTATION = gql`
   mutation RemoveGallery($gallery: String!) {
     removeGallery(galleryId: $gallery)
   }
 `;
 
-// upload image
-// export const UPLOAD_IMAGE_STREAM = gql`
-// mutation SingleUploadStream($file: Upload!) {
-//   singleUploadStream(file: $file) {
-//     filename
-//     mimetype
-//     encoding
-//   }
-// }
-//`;
+// add gallery image
+export const ADD_IMAGE_MUTATION = gql`
+  mutation AddGalleryImage($gallery: AddGalleryImage!) {
+    addGalleryImage(addGalleryImage: $gallery)
+  }
+`;
+
+// remove gallery image
+export const REMOVE_GALLERY_IMAGE_MUTATION = gql`
+  mutation RemoveGalleryImage($image: RemoveGalleryImage!) {
+    removeGalleryImage(removePostImage: $image)
+  }
+`;
