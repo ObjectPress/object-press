@@ -27,14 +27,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
   tag = '',
   image,
   gallery,
-  id = '',
+  id,
   setGalleriesFetched,
   ...props
 }) => {
   const [removeImage] = useMutation(REMOVE_GALLERY_IMAGE_MUTATION);
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
-  async function handleRemove() {
+  function handleRemove() {
     setShowConfirm(true);
+  }
+
+  function copyImage() {
+    navigator.clipboard.writeText(image);
   }
 
   async function deleteGallery() {
@@ -69,6 +73,30 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         {gallery && (
           <ProductMeta>
+            <Button
+              type="button"
+              aria-label="copy button"
+              onClick={copyImage}
+              overrides={{
+                BaseButton: {
+                  style: () => ({
+                    width: '100%',
+                    borderTopLeftRadius: '3px',
+                    borderTopRightRadius: '3px',
+                    borderBottomRightRadius: '3px',
+                    borderBottomLeftRadius: '3px',
+                  }),
+                },
+              }}
+            >
+              Copy
+              <i
+                className="far fa-copy fa-lg"
+                style={{ marginLeft: '15px' }}
+                aria-label="copy button"
+              />
+            </Button>
+
             {showConfirm ? (
               <Button
                 kind={KIND.minimal}

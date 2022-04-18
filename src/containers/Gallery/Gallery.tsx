@@ -85,23 +85,23 @@ export default function Posts() {
       setIsGallery(false);
       setTags(gallery.altTags);
       setContent(gallery.postArr);
-    }
 
-    setIsLoading(false);
+      setIsLoading(false);
+    }
   }
 
   async function handleGallery(value) {
     let galleryList = ((await dispatch(fetchGallery(value[0].id))) as any)
       .payload as GalleryList;
 
-    if (galleryList.images[0]) {
+    if (galleryList?.images) {
       setImages(galleryList.images);
       setIsGallery(true);
       setTags([]);
       setContent([]);
-    }
 
-    setIsLoading(false);
+      setIsLoading(false);
+    }
   }
 
   const handleSearch = async ({ value }) => {
@@ -212,6 +212,7 @@ export default function Posts() {
           </Header>
 
           {!isLoading && images.length === 0 && <NoResult hideButton={false} />}
+
           <Row>
             {!isLoading &&
               images[0] &&

@@ -18,12 +18,12 @@ type Mutate = <MV, RT>(
 ) => Promise<RT>;
 
 const apolloCache = new InMemoryCache({
-  // addTypename: false,
-  // resultCaching: false,
+  addTypename: true,
+  resultCaching: true,
 });
 
 const httpLink = createHttpLink({
-  uri: `${process.env.REACT_APP_API_URL}/graphql`,
+  uri: `${process.env.REACT_APP_API_URL}`,
 });
 
 const authLink = setContext((_, { headers }) => {
