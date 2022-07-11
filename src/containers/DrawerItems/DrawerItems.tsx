@@ -15,6 +15,7 @@ import CredsForm from 'containers/Settings/CredsForm';
 import NewGalleryForm from 'containers/Gallery/NewGalleryForm';
 import UpdateGalleryForm from 'containers/Gallery/UpdateGalleryForm';
 
+import ManageImages from 'containers/ManageImages/MangeImages';
 import { CloseButton } from './DrawerItems.style';
 import AddGalleryImage from 'containers/Gallery/AddGalleryImage';
 
@@ -31,6 +32,7 @@ const DRAWER_COMPONENTS = {
   GALLERY_FORM: NewGalleryForm,
   GALLERY_UPDATE_FORM: UpdateGalleryForm,
   ADD_GALLERY_IMAGE: AddGalleryImage,
+  MANAGE_IMAGES: ManageImages,
 };
 
 export default function DrawerItems() {
@@ -105,7 +107,7 @@ export default function DrawerItems() {
         },
       }}
     >
-      <SpecificContent onClose={closeDrawer} data={data} />
+      <SpecificContent onClose={closeDrawer} data={data[data.length - 1]} />
     </Drawer>
   );
 }

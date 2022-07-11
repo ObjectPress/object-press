@@ -64,6 +64,14 @@ const AddGalleryImage: React.FC<Props> = ({ onClose }) => {
     }
   };
 
+  const onRemove = (index: number) => {
+    const newUploads = [...uploads];
+
+    newUploads.splice(index, 1);
+
+    setUploads(newUploads);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -171,7 +179,7 @@ const AddGalleryImage: React.FC<Props> = ({ onClose }) => {
                     },
                   }}
                 >
-                  <Uploader onChange={onUpload} />
+                  <Uploader files={uploads} onUpload={onUpload} onRemove={onRemove} disabled={loading} />
                 </DrawerBox>
               </Col>
             </Row>

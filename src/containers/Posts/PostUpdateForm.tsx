@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router';
 import { Scrollbars } from 'react-custom-scrollbars';
-import Uploader from 'components/Uploader/Uploader';
 import Button, { KIND } from 'components/Button/Button';
 import DrawerBox from 'components/DrawerBox/DrawerBox';
 import { Row, Col } from 'components/FlexBox/FlexBox';
@@ -24,7 +23,13 @@ import {
 import { slugify } from 'utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { blogsSelector, fetchBlogs } from 'store/blogs';
-import { editPost, fetchPost } from 'store/posts';
+import {
+  clearEditingPost,
+  editPost,
+  fetchPost,
+  savedEditingPostSelector,
+  setEditingPost,
+} from 'store/posts';
 import { Post } from 'types';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -37,6 +42,7 @@ import {
 } from '../../utils';
 import { CloseDrawer } from 'containers/DrawerItems/DrawerItems';
 import { CustomSelect } from 'components/Select/CustomSelect';
+import { useDrawerDispatch } from 'context/DrawerContext';
 
 interface Props {
   onClose: CloseDrawer;
@@ -48,22 +54,48 @@ const options = [
 ];
 
 const NewPostForm: React.FC<Props> = ({ onClose }) => {
+  const drawerDispatch = useDrawerDispatch();
   const { id } = useParams<{ id: string }>();
   const [slug, setSlug] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [isMdEditorVisited, setIsMdEditorVisited] = useState<boolean>(false);
   const [active, setActive] = useState([]);
-  const [altTags, setAltTags] = useState<string[]>(['']);
   const [loading, setLoading] = useState(false);
   const [blogId, setBlogId] = useState([]);
   const [keywords, setKeywords] = useState('');
-  const [images, setImages] = useState<string[]>(['']);
   const [publishDate, setPublishDate] = useState<any>(new Date());
 
   const dispatch = useDispatch();
 
   const blogs = useSelector(blogsSelector());
   const [blogsFetched, setBlogsFetched] = useState(false);
+
+  const savedFormData = useSelector(savedEditingPostSelector());
+
+  const openDrawer = useCallback(() => {
+    drawerDispatch({
+      type: 'OPEN_DRAWER',
+      drawerComponent: 'MANAGE_IMAGES',
+      backUrl: `/update-post/${id}`,
+      newUrl: `/manage-post-images/${id}`,
+    });
+  }, [drawerDispatch, id]);
+
+  const setForm = useCallback(({ post, active, appId }: Post) => {
+    const { title, publishAt, pageTitle, description, keywords, content } =
+      post;
+
+    setInitialPostTitle(title);
+    setPublishDate(new Date(publishAt));
+    setInitialPageTitle(pageTitle);
+    setSlug(slugify(pageTitle));
+    setContent(content);
+    setInitialDescription(description);
+    setActive(options.filter((o) => o.value === active));
+    setKeywords(keywords);
+    setBlogId(blogs.filter((b) => b.id === appId));
+    //eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (!blogs.length && !blogsFetched) {
@@ -73,11 +105,15 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
   }, [dispatch, blogs, blogsFetched]);
 
   useEffect(() => {
-    if (blogs?.length) {
+    if (blogs.length && savedFormData._id !== id) {
       _fetchPost();
     }
     //eslint-disable-next-line
-  }, [blogs]);
+  }, [blogs, savedFormData, id]);
+
+  useEffect(() => {
+    if (savedFormData._id === id) setForm(savedFormData);
+  }, [savedFormData, setForm, id]);
 
   const _fetchPost = async () => {
     const post = ((await dispatch(fetchPost(id))) as any).payload as
@@ -85,69 +121,8 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
       | undefined;
 
     if (post) {
-      const {
-        title,
-        publishAt,
-        pageTitle,
-        content,
-        description,
-        keywords,
-        images,
-        altTags,
-      } = post.post;
-
-      setInitialPostTitle(title);
-      setPublishDate(new Date(publishAt));
-      setInitialPageTitle(pageTitle);
-      setSlug(slugify(pageTitle));
-      setContent(content);
-      setInitialDescription(description);
-      setActive(options.filter((o) => o.value === post.active));
-      setKeywords(keywords);
-      setBlogId(blogs.filter((b) => b.id === post.appId));
-      setImages(images);
-      setAltTags(altTags);
+      dispatch(setEditingPost(post));
     }
-  };
-
-  function onTagChange(value, index: number) {
-    if (altTags.length) {
-      const newTags = [...altTags];
-
-      newTags[index] = value;
-
-      setAltTags(newTags);
-    } else {
-      setAltTags(value);
-    }
-  }
-
-  const tags = () => {
-    return altTags?.length ? (
-      altTags?.map((upload, index) => {
-        return (
-          <FormFields key={index}>
-            <FormLabel>Alt Tag {index + 1}</FormLabel>
-            <Input
-              type="text"
-              name={`tag${index + 1}`}
-              value={upload}
-              onChange={(e) => onTagChange(e.target.value, index)}
-            />
-          </FormFields>
-        );
-      })
-    ) : (
-      <FormFields>
-        <FormLabel>Alt Tags</FormLabel>
-        <Input
-          type="text"
-          name="image alt tags"
-          value="You haven't uploaded any images."
-          readOnly
-        />
-      </FormFields>
-    );
   };
 
   const {
@@ -210,14 +185,15 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
                 slug: slugify(newPageTitle),
                 keywords,
                 description: newDescription,
-                images: images?.length ? images : [''],
-                altTags: altTags?.length ? altTags : [''],
+                images: savedFormData.post.images,
+                altTags: savedFormData.post.altTags,
               },
               active: active[0].value,
             },
           })
         );
 
+        dispatch(clearEditingPost());
         onClose();
       } catch (e) {
         console.log(e);
@@ -285,6 +261,33 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
                     disabled
                   />
                 </FormFields>
+              </DrawerBox>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col lg={4}>
+              <FieldDetails>Manage Post images</FieldDetails>
+            </Col>
+            <Col lg={8}>
+              <DrawerBox>
+                <Button
+                  type="button"
+                  overrides={{
+                    BaseButton: {
+                      style: () => ({
+                        width: '100%',
+                        borderTopLeftRadius: '3px',
+                        borderTopRightRadius: '3px',
+                        borderBottomRightRadius: '3px',
+                        borderBottomLeftRadius: '3px',
+                      }),
+                    },
+                  }}
+                  onClick={openDrawer}
+                >
+                  Post Images
+                </Button>
               </DrawerBox>
             </Col>
           </Row>
@@ -409,42 +412,6 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
               </DrawerBox>
             </Col>
           </Row>
-
-          {images[0].includes('https') && (
-            <Row>
-              <Col lg={4}>
-                <FieldDetails>Upload your post images here</FieldDetails>
-              </Col>
-              <Col lg={8}>
-                <DrawerBox
-                  overrides={{
-                    Block: {
-                      style: {
-                        width: '100%',
-                        height: 'auto',
-                        padding: '30px',
-                        borderRadius: '3px',
-                        backgroundColor: '#ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.3)',
-                      },
-                    },
-                  }}
-                >
-                  <Uploader uploads={images} />
-                </DrawerBox>
-              </Col>
-
-              <Col lg={4}>
-                <FieldDetails>Add your image alt tags here</FieldDetails>
-              </Col>
-              <Col lg={8}>
-                <DrawerBox>{tags()}</DrawerBox>
-              </Col>
-            </Row>
-          )}
         </Scrollbars>
 
         <ButtonGroup>
