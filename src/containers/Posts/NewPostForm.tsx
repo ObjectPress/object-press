@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useDrawerDispatch } from 'context/DrawerContext';
-import Uploader from 'components/Uploader/Uploader';
 import Button, { KIND } from 'components/Button/Button';
 import DrawerBox from 'components/DrawerBox/DrawerBox';
 import { Row, Col } from 'components/FlexBox/FlexBox';
@@ -22,10 +21,14 @@ import {
   ButtonGroup,
 } from '../DrawerItems/DrawerItems.style';
 import { slugify } from 'utils';
-import { addNewImage } from 'services/apiServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { blogsSelector, fetchBlogs } from 'store/blogs';
-import { addPost } from 'store/posts';
+import {
+  addPost,
+  clearNewPost,
+  savedNewPostSelector,
+  setNewPost,
+} from 'store/posts';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import useFormControl from '../../hooks/useFormControl';
@@ -37,6 +40,7 @@ import {
 import { FormControl } from 'baseui/form-control';
 import { CloseDrawer } from 'containers/DrawerItems/DrawerItems';
 import { CustomSelect } from 'components/Select/CustomSelect';
+import { NewPost } from 'types';
 
 interface Props {
   onClose: CloseDrawer;
@@ -53,27 +57,70 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
   const [content, setContent] = useState<string>('');
   const [isMdEditorVisited, setIsMdEditorVisited] = useState<boolean>(false);
   const [active, setActive] = useState([]);
-  const [uploads, setUploads] = useState<File[]>([]);
-  const [altTags, setAltTags] = useState<string[]>(['']);
   const [loading, setLoading] = useState(false);
   const [blogId, setBlogId] = useState([]);
   const [keywords, setKeywords] = useState('');
   const [publishAt, setPublishAt] = useState(new Date());
+  const [blogsFetched, setBlogsFetched] = useState(false);
 
   const dispatch = useDispatch();
 
   const blogs = useSelector(blogsSelector());
-  const [blogsFetched, setBlogsFetched] = useState(false);
+  const savedFormData = useSelector(savedNewPostSelector());
 
-  // eslint-disable-next-line
+  const getFormValue = (): NewPost => ({
+    appId: blogId[0]?.id || '',
+    post: {
+      title: postTitle,
+      publishAt: publishAt.toISOString(),
+      content,
+      pageTitle,
+      slug: slugify(pageTitle),
+      keywords,
+      description: description,
+      images: savedFormData.post.images,
+      altTags: savedFormData.post.altTags,
+    },
+    active: active[0]?.value || '',
+  });
+
+  const setFormValue = (form: NewPost) => {
+    setBlogId(
+      form.appId.length ? [blogs.find(({ id }) => id === form.appId)] : []
+    );
+    setActive(
+      form.active
+        ? [options.find((option) => option.value === form.active)]
+        : []
+    );
+    setPostTitle(form.post.title);
+    setPublishAt(
+      form.post.publishAt.length ? new Date(form.post.publishAt) : new Date()
+    );
+    setContent(form.post.content);
+    setPageTitle(form.post.pageTitle);
+    setSlug(form.post.slug);
+    setKeywords(form.post.keywords);
+    setDescription(form.post.description);
+  };
+
   const openDrawer = useCallback(() => {
+    dispatch(setNewPost(getFormValue()));
     drawerDispatch({
       type: 'OPEN_DRAWER',
       drawerComponent: 'MANAGE_IMAGES',
-      backUrl: '/posts',
-      newUrl: '/manage-images',
+      backUrl: '/new-post',
+      newUrl: '/manage-post-images/new',
     });
-  }, [drawerDispatch]);
+    // eslint-disable-next-line
+  }, [drawerDispatch, getFormValue]);
+
+  useEffect(() => {
+    const formData = savedFormData;
+
+    setFormValue(formData);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (!blogs?.length && !blogsFetched) {
@@ -82,51 +129,13 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
     }
   }, [dispatch, blogs, blogsFetched]);
 
-  function onTagChange(value, index: number) {
-    if (altTags?.length) {
-      const newTags = [...altTags];
-
-      newTags[index] = value;
-
-      setAltTags(newTags);
-    } else {
-      setAltTags(value);
-    }
-  }
-
-  const tags = () => {
-    return uploads[0] ? (
-      uploads?.map((upload, index) => {
-        return (
-          <FormFields key={index}>
-            <FormLabel>Image Alt Tag {index + 1}</FormLabel>
-            <Input
-              type="text"
-              name={`tag${index + 1}`}
-              onChange={(e) => onTagChange(e.target.value, index)}
-            />
-          </FormFields>
-        );
-      })
-    ) : (
-      <FormFields>
-        <FormLabel>Image Alt Tags</FormLabel>
-        <Input
-          type="text"
-          name="image alt tags"
-          value="You haven't uploaded any images."
-          readOnly
-        />
-      </FormFields>
-    );
-  };
-
   const {
     value: postTitle,
     isValid: postTitleIsValid,
     onInputChangeHandler: onPostTitleChangeHandler,
     onInputBlurHandler: onPostTitleBlurHandler,
     shouldShowError: shouldPostTitleShowError,
+    setValue: setPostTitle,
   } = useFormControl(validatePostTitle);
   const {
     value: pageTitle,
@@ -134,6 +143,7 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
     onInputChangeHandler: onPageTitleChangeHandler,
     onInputBlurHandler: onPageTitleBlurHandler,
     shouldShowError: shouldPageTitleShowError,
+    setValue: setPageTitle,
   } = useFormControl(validatePageTitle);
   const {
     value: description,
@@ -141,6 +151,7 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
     onInputChangeHandler: onDescriptionChangeHandler,
     onInputBlurHandler: onDescriptionBlurHandler,
     shouldShowError: shouldDescriptionShowError,
+    setValue: setDescription,
   } = useFormControl(validateDescription);
 
   const isMdEditorValid = content.length > 0;
@@ -164,58 +175,21 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
 
     setLoading(true);
 
-    const imageUrls: string[] = [];
-    const stamp = Date.now();
-
     if (isFormValid) {
       try {
-        for (const file of uploads) {
-          const formData = new FormData();
-          let name = `${stamp}/${file.name}`;
-
-          formData.append(name, file);
-
-          // Send this form data to a Rest API
-          await addNewImage(formData);
-
-          let path = `https://share.objectpress.io/${name}`;
-          imageUrls.push(path);
-        }
-
         await dispatch(
           addPost({
-            post: {
-              appId: blogId[0].id,
-              post: {
-                title: postTitle,
-                publishAt: publishAt.toISOString(),
-                content,
-                pageTitle,
-                slug: slugify(pageTitle),
-                keywords,
-                description: description,
-                images: imageUrls?.length ? imageUrls : [''],
-                altTags,
-              },
-              active: active[0].value,
-            },
+            post: getFormValue(),
           })
         );
 
+        dispatch(clearNewPost());
         onClose();
       } catch (e) {
         console.log(e);
       }
     }
     setLoading(false);
-  };
-
-  const onUpload = (files: File[]) => {
-    const file = files[0];
-
-    if (uploads?.length < 5) {
-      setUploads([...uploads, file]);
-    }
   };
 
   const handleActiveChange = ({ value }) => {
@@ -279,6 +253,33 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
                     searchable={false}
                   />
                 </FormFields>
+              </DrawerBox>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col lg={4}>
+              <FieldDetails>Manage Post images</FieldDetails>
+            </Col>
+            <Col lg={8}>
+              <DrawerBox>
+                <Button
+                  type="button"
+                  overrides={{
+                    BaseButton: {
+                      style: () => ({
+                        width: '100%',
+                        borderTopLeftRadius: '3px',
+                        borderTopRightRadius: '3px',
+                        borderBottomRightRadius: '3px',
+                        borderBottomLeftRadius: '3px',
+                      }),
+                    },
+                  }}
+                  onClick={openDrawer}
+                >
+                  Post Images
+                </Button>
               </DrawerBox>
             </Col>
           </Row>
@@ -405,40 +406,6 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
                   />
                 </FormFields>
               </DrawerBox>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col lg={4}>
-              <FieldDetails>Upload your post images here</FieldDetails>
-            </Col>
-            <Col lg={8}>
-              <DrawerBox
-                overrides={{
-                  Block: {
-                    style: {
-                      width: '100%',
-                      height: 'auto',
-                      padding: '30px',
-                      borderRadius: '3px',
-                      backgroundColor: '#ffffff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.3)',
-                    },
-                  },
-                }}
-              >
-                <Uploader onChange={onUpload} />
-              </DrawerBox>
-            </Col>
-
-            <Col lg={4}>
-              <FieldDetails>Add your image alt tags here</FieldDetails>
-            </Col>
-            <Col lg={8}>
-              <DrawerBox>{tags()}</DrawerBox>
             </Col>
           </Row>
         </Scrollbars>
