@@ -81,7 +81,7 @@ const NewPostForm: React.FC<Props> = ({ onClose }) => {
       images: savedFormData.post.images,
       altTags: savedFormData.post.altTags,
     },
-    active: active[0]?.value || '',
+    active: active[0]?.value || false,
   });
 
   const setFormValue = (form: NewPost) => {
