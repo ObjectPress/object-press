@@ -54,6 +54,7 @@ export default function Posts() {
   const [tags, setTags] = useState<string[]>(['']);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isGallery, setIsGallery] = useState<boolean>(false);
+  const [postIds, setPostIds] = useState<string[]>([])
   const isOpen = useDrawerState('isOpen');
 
   async function getGalleries() {
@@ -85,6 +86,7 @@ export default function Posts() {
       setIsGallery(false);
       setTags(gallery.altTags);
       setContent(gallery.postArr);
+      setPostIds(gallery.ids);
 
       setIsLoading(false);
     }
@@ -99,6 +101,7 @@ export default function Posts() {
       setIsGallery(true);
       setTags([]);
       setContent([]);
+      setPostIds([]);
 
       setIsLoading(false);
     }
@@ -231,9 +234,9 @@ export default function Posts() {
                         title={content[0] && content[index]}
                         tag={tags[0] && tags[index]}
                         image={image}
-                        gallery={isGallery}
-                        id={selectedGallery[0]?.id}
-                        setGalleriesFetched={setGalleriesFetched}
+                        galleryId={isGallery && selectedGallery[0]?.id}
+                        postId={postIds[index]}
+                        onRemove={() => setGalleriesFetched(false)}
                       />
                     </Fade>
                   </Col>

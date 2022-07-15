@@ -1,4 +1,4 @@
-import { Content, InputValidation, Post } from 'types';
+import { InputValidation, Post } from 'types';
 
 export const slugify = (text: string): string => {
   return text
@@ -167,18 +167,20 @@ export const validatePageTitle: InputValidation = (value) => {
 };
 
 export const mapBlogImages = (posts: Post[]) => {
-  const content = posts?.map((post: Post) => post.post);
   let gallery: string[] = [];
   let postArr: string[] = [];
   let altTags: string[] = [];
+  let ids: string[] = [];
   let count: number[] = [];
 
-  content?.forEach((post: Content) => {
-    if (post?.images[0]) {
-      gallery.push(...post.images);
-      post.images.forEach((item, index) => {
-        postArr.push(post.title);
-        if (postArr.includes(post.title)) {
+  posts?.forEach((post: Post) => {
+    const content = post.post;
+    if (content?.images[0]) {
+      gallery.push(...content.images);
+      content.images.forEach((item, index) => {
+        postArr.push(content.title);
+        ids.push(post._id);
+        if (postArr.includes(content.title)) {
           count.push(index + 1);
         } else {
           count.push(1);
@@ -186,9 +188,9 @@ export const mapBlogImages = (posts: Post[]) => {
       });
     }
 
-    if (post?.images[0] && post?.altTags[0]) {
-      altTags.push(...post.altTags);
-    } else if (post?.images[0]) {
+    if (content?.images[0] && content?.altTags[0]) {
+      altTags.push(...content.altTags);
+    } else if (content?.images[0]) {
       altTags.push('');
     }
   });
@@ -198,5 +200,6 @@ export const mapBlogImages = (posts: Post[]) => {
     altTags,
     postArr,
     count,
+    ids,
   };
 };

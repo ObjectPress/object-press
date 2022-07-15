@@ -1,6 +1,9 @@
 import { useMutation } from '@apollo/client';
 import { Button, KIND } from 'baseui/button';
-import { REMOVE_GALLERY_IMAGE_MUTATION } from 'graphql/mutations';
+import {
+  REMOVE_GALLERY_IMAGE_MUTATION,
+  REMOVE_IMAGE_MUTATION,
+} from 'graphql/mutations';
 import React, { useState } from 'react';
 import {
   ProductCardWrapper,
@@ -17,21 +20,22 @@ type ProductCardProps = {
   title?: string;
   tag?: string;
   image: string;
-  gallery: boolean;
-  id: string;
-  setGalleriesFetched: React.Dispatch<React.SetStateAction<boolean>>;
+  postId?: string;
+  galleryId?: string;
+  onRemove?: () => void;
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({
   title = '',
   tag = '',
   image,
-  gallery,
-  id,
-  setGalleriesFetched,
+  postId,
+  galleryId,
+  onRemove,
   ...props
 }) => {
-  const [removeImage] = useMutation(REMOVE_GALLERY_IMAGE_MUTATION);
+  const [removeGalleryImage] = useMutation(REMOVE_GALLERY_IMAGE_MUTATION);
+  const [removePostImage] = useMutation(REMOVE_IMAGE_MUTATION);
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   function handleRemove() {
     setShowConfirm(true);
@@ -41,18 +45,29 @@ const ProductCard: React.FC<ProductCardProps> = ({
     navigator.clipboard.writeText(image);
   }
 
-  async function deleteGallery() {
-    await removeImage({
-      variables: {
-        image: {
-          image: image,
-          galleryId: id,
+  const deleteImage = async () => {
+    if (galleryId && !postId)
+      await removeGalleryImage({
+        variables: {
+          image: {
+            image: image,
+            galleryId: galleryId,
+          },
         },
-      },
-    });
+      });
 
-    setGalleriesFetched(false);
-  }
+    if (postId && !galleryId)
+      await removePostImage({
+        variables: {
+          image: {
+            postId,
+            image,
+          },
+        },
+      });
+
+    onRemove();
+  };
 
   return (
     <ProductCardWrapper {...props}>
@@ -61,7 +76,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </ProductImageWrapper>
       <ProductInfo>
         <ProductTitle>{title ? `Post Title: '${title}'` : ''}</ProductTitle>
-        {!gallery && (
+        {!galleryId && (
           <ProductMeta>
             <ProductPriceWrapper>
               <ProductPrice>
@@ -71,7 +86,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </ProductMeta>
         )}
 
-        {gallery && (
+        {(galleryId || postId) && (
           <ProductMeta>
             <Button
               type="button"
@@ -100,7 +115,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {showConfirm ? (
               <Button
                 kind={KIND.minimal}
-                onClick={deleteGallery}
+                onClick={deleteImage}
                 type="button"
                 overrides={{
                   BaseButton: {
