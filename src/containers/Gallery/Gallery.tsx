@@ -52,6 +52,7 @@ export default function Posts() {
   const [tags, setTags] = useState<string[]>(['']);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isGallery, setIsGallery] = useState<boolean>(false);
+  const [postIds, setPostIds] = useState<string[]>([]);
   const isOpen = useDrawerState('isOpen');
 
   async function getGalleries() {
@@ -84,6 +85,7 @@ export default function Posts() {
       setIsGallery(false);
       setTags(gallery.altTags);
       setContent(gallery.postArr);
+      setPostIds(gallery.ids);
 
       setIsLoading(false);
     }
@@ -98,6 +100,7 @@ export default function Posts() {
       setIsGallery(true);
       setTags([]);
       setContent([]);
+      setPostIds([]);
 
       setIsLoading(false);
     }
@@ -213,14 +216,15 @@ export default function Posts() {
           {!isLoading && images.length === 0 && <NoResult hideButton={false} />}
 
           <ImageGrid
-            selectedGallery={selectedGallery[0]?.id}
-            setGalleriesFetched={setGalleriesFetched}
+            onRemove={() => setGalleriesFetched(false)}
             loading={isLoading}
             images={images.map((image, index) => ({
               title: content[index],
               src: image,
               alt: tags[index],
               isGallery,
+              postId: postIds[index],
+              galleryId: selectedGallery[0]?.id,
             }))}
           />
         </Col>
