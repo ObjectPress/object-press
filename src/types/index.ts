@@ -181,6 +181,8 @@ export type PostState = {
   posts: Post[];
   loading: boolean;
   error?: string;
+  newPost: NewPost;
+  editingPost: Post;
 };
 
 /**
@@ -223,5 +225,13 @@ export interface FormControlHook {
     onInputBlurHandler: () => void;
     shouldShowError: boolean;
     setInitialValue: (initialValue: string) => void;
+    setValue: (newValue: string) => void;
   };
+}
+
+export interface ImageData {
+  title: string;
+  src: string;
+  alt: string;
+  isGallery?: boolean;
 }

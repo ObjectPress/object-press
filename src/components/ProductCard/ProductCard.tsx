@@ -95,7 +95,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               overrides={{
                 BaseButton: {
                   style: () => ({
-                    width: '100%',
+                    width: '45%',
                     borderTopLeftRadius: '3px',
                     borderTopRightRadius: '3px',
                     borderBottomRightRadius: '3px',
@@ -107,7 +107,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               Copy
               <i
                 className="far fa-copy fa-lg"
-                style={{ marginLeft: '15px' }}
+                style={{ marginLeft: '5px' }}
                 aria-label="copy button"
               />
             </Button>
@@ -120,7 +120,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 overrides={{
                   BaseButton: {
                     style: ({ $theme }) => ({
-                      width: '100%',
+                      width: '45%',
                       borderTopLeftRadius: '3px',
                       borderTopRightRadius: '3px',
                       borderBottomRightRadius: '3px',
@@ -133,7 +133,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 Confirm
                 <i
                   className="fas fa-exclamation-triangle"
-                  style={{ marginLeft: '15px', color: '#666D92' }}
+                  style={{ marginLeft: '5px', color: '#666D92' }}
                 />
               </Button>
             ) : (
@@ -144,7 +144,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 overrides={{
                   BaseButton: {
                     style: ({ $theme }) => ({
-                      width: '100%',
+                      width: '45%',
                       borderTopLeftRadius: '3px',
                       borderTopRightRadius: '3px',
                       borderBottomRightRadius: '3px',
@@ -157,7 +157,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 Remove
                 <i
                   className="fas fa-trash"
-                  style={{ marginLeft: '15px', color: '#666D92' }}
+                  style={{ marginLeft: '5px', color: '#666D92' }}
                 />
               </Button>
             )}

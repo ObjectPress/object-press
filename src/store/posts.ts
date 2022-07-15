@@ -2,6 +2,7 @@ import {
   createAsyncThunk,
   createSelector,
   createSlice,
+  PayloadAction,
 } from '@reduxjs/toolkit';
 import { Post, PostState, NewPost, UpdatePost } from 'types';
 // API imports
@@ -153,16 +154,68 @@ export const searchPostsByBlog = createAsyncThunk<Post[], string>(
   }
 );
 
+const initialNewPostState: NewPost = {
+  appId: '',
+  post: {
+    title: '',
+    publishAt: '',
+    content: '',
+    pageTitle: '',
+    slug: '',
+    keywords: '',
+    description: '',
+    images: [],
+    altTags: [],
+  },
+  active: undefined,
+};
+
+const initialEditingPostState: Post = {
+  _id: '',
+  appId: '',
+  active: undefined,
+  createDate: '',
+  modifiedDate: '',
+  post: {
+    title: '',
+    publishAt: '',
+    content: '',
+    pageTitle: '',
+    slug: '',
+    keywords: '',
+    description: '',
+    images: [],
+    altTags: [],
+  },
+};
+
 export const initialState: PostState = {
   posts: [],
   loading: false,
   error: undefined,
+  newPost: initialNewPostState,
+  editingPost: initialEditingPostState,
 };
 
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {},
+  reducers: {
+    setNewPost: (state: PostState, action: PayloadAction<NewPost>) => {
+      const post = action.payload;
+      state.newPost = post;
+    },
+    clearNewPost: (state: PostState) => {
+      state.newPost = initialNewPostState;
+    },
+    setEditingPost: (state: PostState, action: PayloadAction<Post>) => {
+      const post = action.payload;
+      state.editingPost = post;
+    },
+    clearEditingPost: (state: PostState) => {
+      state.editingPost = initialEditingPostState;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchPosts.pending, (state, { payload }) => {
       state.error = undefined;
@@ -220,6 +273,9 @@ const postsSlice = createSlice({
   },
 });
 
+export const { setNewPost, clearNewPost, setEditingPost, clearEditingPost } =
+  postsSlice.actions;
+
 export const postsStateSelector = (state: RootState) => state.posts;
 
 export const postsSelector = () =>
@@ -227,5 +283,11 @@ export const postsSelector = () =>
 
 export const postsLoadingSelector = () =>
   createSelector(postsStateSelector, (state) => state.loading);
+
+export const savedNewPostSelector = () =>
+  createSelector(postsStateSelector, (state) => state.newPost);
+
+export const savedEditingPostSelector = () =>
+  createSelector(postsStateSelector, (state) => state.editingPost);
 
 export default postsSlice.reducer;

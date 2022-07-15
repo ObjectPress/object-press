@@ -1,20 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Select from 'components/Select/Select';
 import { Header } from 'components/Wrapper.style';
 import { Grid } from 'components/FlexBox/FlexBox';
-import { LoaderItem, Row, Col } from './Gallery.style';
+import { Row, Col } from './Gallery.style';
 // redux
 import { useDispatch } from 'react-redux';
 import { searchPostsByBlog } from 'store/posts';
 import { GalleryList, Post } from 'types';
 import { fetchGalleries, fetchGallery } from 'store/galleries';
-import Fade from 'react-reveal/Fade';
-import ProductCard from 'components/ProductCard/ProductCard';
-import Placeholder from 'components/Placeholder/Placeholder';
 import { Button } from 'baseui/button';
 import { useDrawerDispatch, useDrawerState } from 'context/DrawerContext';
 import { mapBlogImages } from 'utils';
 import NoResult from 'components/NoResult/NoResult';
+import { ImageGrid } from 'components/ImageGrid/ImageGrid';
 
 export default function Posts() {
   const drawerDispatch = useDrawerDispatch();
@@ -49,7 +47,7 @@ export default function Posts() {
   const [selectedGallery, setSelectedGallery] = useState([]);
   const [galleriesFetched, setGalleriesFetched] = useState(false);
   const [galleries, setGalleries] = useState<GalleryList[]>([]);
-  const [images, setImages] = useState<string[]>(['']);
+  const [images, setImages] = useState<string[]>([]);
   const [content, setContent] = useState<string[]>(['']);
   const [tags, setTags] = useState<string[]>(['']);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -67,12 +65,13 @@ export default function Posts() {
   }
 
   useEffect(() => {
+    console.log(galleriesFetched);
     if (!galleriesFetched || !isOpen) {
       setIsLoading(true);
       setSelectedGallery([]);
       getGalleries();
     }
-    // eslint-disable-next-line
+    //eslint-disable-next-line
   }, [galleriesFetched, isOpen]);
 
   async function handleBlog(value: GalleryList[]) {
@@ -108,7 +107,7 @@ export default function Posts() {
   }
 
   const handleSearch = async ({ value }) => {
-    setImages(['']);
+    setImages([]);
     setIsLoading(true);
     if (value[0]?.blog) {
       await handleBlog(value);
@@ -215,59 +214,18 @@ export default function Posts() {
           </Header>
 
           {!isLoading && images.length === 0 && <NoResult hideButton={false} />}
-
-          <Row>
-            {!isLoading &&
-              images[0] &&
-              images.map((image: string, index: number) => {
-                return (
-                  <Col
-                    md={4}
-                    lg={3}
-                    sm={6}
-                    xs={12}
-                    key={index}
-                    style={{ margin: '15px 0' }}
-                  >
-                    <Fade bottom duration={800} delay={index * 10}>
-                      <ProductCard
-                        title={content[0] && content[index]}
-                        tag={tags[0] && tags[index]}
-                        image={image}
-                        galleryId={isGallery && selectedGallery[0]?.id}
-                        postId={postIds[index]}
-                        onRemove={() => setGalleriesFetched(false)}
-                      />
-                    </Fade>
-                  </Col>
-                );
-              })}
-
-            {isLoading && (
-              <>
-                <Col md={4} lg={3} sm={6} xs={12} style={{ margin: '15px 0' }}>
-                  <LoaderItem>
-                    <Placeholder />
-                  </LoaderItem>
-                </Col>
-                <Col md={4} lg={3} sm={6} xs={12} style={{ margin: '15px 0' }}>
-                  <LoaderItem>
-                    <Placeholder />
-                  </LoaderItem>
-                </Col>
-                <Col md={4} lg={3} sm={6} xs={12} style={{ margin: '15px 0' }}>
-                  <LoaderItem>
-                    <Placeholder />
-                  </LoaderItem>
-                </Col>
-                <Col md={4} lg={3} sm={6} xs={12} style={{ margin: '15px 0' }}>
-                  <LoaderItem>
-                    <Placeholder />
-                  </LoaderItem>
-                </Col>
-              </>
-            )}
-          </Row>
+         
+          <ImageGrid
+            selectedGallery={selectedGallery[0]?.id}
+            setGalleriesFetched={setGalleriesFetched}
+            loading={isLoading}
+            images={images.map((image, index) => ({
+              title: content[index],
+              src: image,
+              alt: tags[index],
+              isGallery,
+            }))}
+          />
         </Col>
       </Row>
     </Grid>
