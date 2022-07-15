@@ -17,6 +17,7 @@ import {
 } from './ProductCard.style';
 
 type ProductCardProps = {
+  isGallery: boolean;
   title?: string;
   tag?: string;
   image: string;
@@ -26,6 +27,7 @@ type ProductCardProps = {
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({
+  isGallery = false,
   title = '',
   tag = '',
   image,
@@ -46,7 +48,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   }
 
   const deleteImage = async () => {
-    if (galleryId && !postId)
+    if (isGallery)
       await removeGalleryImage({
         variables: {
           image: {
@@ -56,7 +58,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         },
       });
 
-    if (postId && !galleryId)
+    if (!isGallery)
       await removePostImage({
         variables: {
           image: {

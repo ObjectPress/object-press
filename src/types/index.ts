@@ -233,5 +233,7 @@ export interface ImageData {
   title: string;
   src: string;
   alt: string;
+  galleryId?: string;
+  postId?: string;
   isGallery?: boolean;
 }
