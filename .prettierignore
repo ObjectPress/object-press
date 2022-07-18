@@ -1,6 +1,5 @@
 # Ignore artifacts:
 node_modules
-build
+dist
 public
-yarn.lock
-docs
+.env
