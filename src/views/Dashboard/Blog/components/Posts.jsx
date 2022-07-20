@@ -2,8 +2,8 @@
 import {
   Button,
   Flex,
-  Grid,
   Icon,
+  Stack,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -15,12 +15,12 @@ import React from 'react';
 import { FaPlus } from 'react-icons/fa';
 import PostCard from './PostCard';
 
-export default function Posts({ title, description, data, id }) {
+export default function Posts({ title, description, data }) {
   const textColor = useColorModeValue('gray.700', 'white');
 
   return (
     <Card p="16px">
-      <CardHeader p="12px 5px" mb="12px">
+      <CardHeader p={{ sm: '5px', md: '12px' }} mb="12px">
         <Flex direction="column">
           <Text fontSize="lg" color={textColor} fontWeight="bold">
             {title}
@@ -30,20 +30,20 @@ export default function Posts({ title, description, data, id }) {
           </Text>
         </Flex>
       </CardHeader>
-      <CardBody px="5px" minHeight={{ sm: '200px', md: '400px' }}>
-        <Grid
-          templateColumns={{ sm: '1fr', md: '1fr 1fr', xl: 'repeat(4, 1fr)' }}
-          templateRows={{ sm: '1fr 1fr 1fr auto', md: '1fr 1fr', xl: '1fr' }}
-          gap="24px"
-        >
+      <CardBody
+        p={{ sm: '5px', md: '12px' }}
+        minHeight={{ sm: '275px', md: '400px' }}
+        minWidth={{ sm: '275px', md: '400px' }}
+      >
+        <Stack gap="24px" w="100%" direction={{ sm: 'column', md: 'row' }}>
           <Button
             p="0px"
             bg="transparent"
             color="gray.500"
             border="1px solid lightgray"
             borderRadius="15px"
-            minHeight="100%"
-            minWidth={{ sm: '200px', md: '400px' }}
+            h={{ sm: '275px', md: '400px' }}
+            w={{ sm: '100%', md: '400px' }}
           >
             <Flex direction="column" justifyContent="center" align="center">
               <Icon as={FaPlus} fontSize="lg" mb="12px" />
@@ -56,14 +56,13 @@ export default function Posts({ title, description, data, id }) {
             data.map((card) => {
               return (
                 <PostCard
-                  key={card.id}
                   image={card.post.images[0]}
                   name={card.post.title}
                   description={card.post.description}
                 />
               );
             })}
-        </Grid>
+        </Stack>
       </CardBody>
     </Card>
   );

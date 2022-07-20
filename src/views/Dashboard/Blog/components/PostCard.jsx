@@ -14,22 +14,23 @@ export default function PostCard({ image, name, description }) {
 
   return (
     <Button
+      p="0px"
       bg="transparent"
       color="gray.500"
       border="1px solid lightgray"
       borderRadius="15px"
-      minHeight="100%"
-      minWidth={{ sm: '200px', md: '400px' }}
+      h={{ sm: '275px', md: '400px' }}
+      w={{ sm: '100%', md: '400px' }}
     >
       <Flex direction="column" justifyContent="center" align="center">
-        <Box mb="50px" position="relative" borderRadius="15px">
+        <Box my="25px" position="relative" borderRadius="15px">
           <Image
             src={image}
             borderRadius="15px"
             mx="auto"
-            h="150px"
+            h={{ sm: '100px', md: '150px' }}
             w="auto"
-            maxW="150px"
+            maxWidth={{ sm: '100px', md: '150px' }}
           />
         </Box>
         <Flex

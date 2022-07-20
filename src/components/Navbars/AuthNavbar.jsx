@@ -16,10 +16,10 @@ import {
   RocketIcon,
 } from 'components/Icons/Icons';
 import SidebarResponsive from 'components/Sidebar/SidebarResponsive';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import routes from 'routes.js';
+
 export default function AuthNavbar(props) {
   const [open, setOpen] = React.useState(false);
   const handleDrawerToggle = () => {
@@ -200,8 +200,3 @@ export default function AuthNavbar(props) {
     </Flex>
   );
 }
-
-AuthNavbar.propTypes = {
-  color: PropTypes.oneOf(['primary', 'info', 'success', 'warning', 'danger']),
-  brandText: PropTypes.string,
-};
