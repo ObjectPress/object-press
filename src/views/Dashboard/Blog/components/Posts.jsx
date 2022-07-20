@@ -15,7 +15,7 @@ import React from 'react';
 import { FaPlus } from 'react-icons/fa';
 import PostCard from './PostCard';
 
-export default function Posts({ title, description, data }) {
+export default function Posts({ title, description, data, id }) {
   const textColor = useColorModeValue('gray.700', 'white');
 
   return (
@@ -56,6 +56,7 @@ export default function Posts({ title, description, data }) {
             data.map((card) => {
               return (
                 <PostCard
+                  key={card.id}
                   image={card.post.images[0]}
                   name={card.post.title}
                   description={card.post.description}

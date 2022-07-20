@@ -21,7 +21,7 @@ export const PROFILE_QUERY = gql`
 // get creds
 export const CREDS_QUERY = gql`
   query GetCreds {
-    getAllBlogs {
+    getCreds {
       title
       userSecret
       appSecret
