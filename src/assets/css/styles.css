@@ -1,0 +1,155 @@
+#sidebarScrollRemove::-webkit-scrollbar {
+  display: none;
+}
+
+#sidebarScrollRemove {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+/* Full Calendar */
+a.fc-daygrid-day-number {
+  width: 100%;
+  text-align: center;
+}
+a.fc-daygrid-day-number {
+  width: 100%;
+  text-align: center;
+}
+a.fc-daygrid-day-number {
+  width: 100%;
+  text-align: center;
+}
+div.fc-daygrid-event-harness {
+  top: unset;
+}
+.fc-daygrid-event-harness .fc-daygrid-event-harness-abs {
+  top: 0px;
+  bottom: unset;
+}
+.fc .fc-scrollgrid-section-header > *,
+.fc .fc-scrollgrid-section-footer > * {
+  border-right: 0px !important;
+}
+.fc-theme-standard .fc-scrollgrid {
+  border: 0px solid transparent !important;
+}
+
+.fc-col-header-cell.fc-day.fc-day-mon {
+  border-right: 0px;
+  border-left: 0px;
+}
+
+.fc-col-header-cell.fc-day.fc-day-tue {
+  border-left: 0px;
+  border-right: 0px;
+}
+.fc-col-header-cell.fc-day.fc-day-wed {
+  border-right: 0px;
+  border-left: 0px;
+}
+
+.fc-col-header-cell.fc-day.fc-day-thu {
+  border-left: 0px;
+  border-right: 0px;
+}
+.fc-col-header-cell.fc-day.fc-day-fri {
+  border-right: 0px;
+  border-left: 0px;
+}
+
+.fc-col-header-cell.fc-day.fc-day-sat {
+  border-left: 0px;
+  border-right: 0px;
+}
+
+.fc-col-header-cell.fc-day.fc-day-sun {
+  border-left: 0px;
+  border-right: 0px;
+}
+.fc-scrollgrid.fc-scrollgrid-liquid > td {
+  border: 0px;
+}
+
+.fc .fc-scrollgrid-section > td {
+  border: 0;
+}
+
+/* React Kanban */
+body.chakra-ui-light .react-kanban-column {
+  background-color: #edf2f7; /* Gray/Gray-100 */
+  border-radius: 15px;
+}
+body.chakra-ui-dark .react-kanban-column {
+  background-color: #2d3748; /* Gray/Gray-100 */
+  border-radius: 15px;
+}
+.react-kanban-column {
+  width: 500px;
+}
+.react-kanban-card-adder-form {
+  width: 100%;
+  background-color: red;
+  border-radius: 15px;
+}
+.react-kanban-card-adder-button {
+  display: none;
+  background-color: red !important;
+  border-radius: 15px;
+}
+
+/* Text Editor */
+
+body.chakra-ui-light .ql-toolbar.ql-snow {
+  border-color: rgb(226, 232, 240); /* Gray/Gray-100 */
+}
+
+body.chakra-ui-dark .ql-toolbar.ql-snow {
+  border-color: rgba(255, 255, 255, 0.16); /* Gray/Gray-100 */
+}
+
+body.chakra-ui-light .ql-container.ql-snow {
+  border-color: rgb(226, 232, 240); /* Gray/Gray-100 */
+}
+
+body.chakra-ui-dark .ql-container.ql-snow {
+  border-color: rgba(255, 255, 255, 0.16); /* Gray/Gray-100 */
+}
+
+body.chakra-ui-light .ql-snow .ql-picker-label {
+  color: rgb(26, 32, 44) !important;
+}
+body.chakra-ui-dark .ql-snow .ql-picker-label {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+body.chakra-ui-light .ql-snow .ql-stroke {
+  stroke: rgb(26, 32, 44) !important;
+}
+body.chakra-ui-dark .ql-snow .ql-stroke {
+  stroke: rgba(255, 255, 255, 0.92) !important;
+}
+
+body.chakra-ui-light .ql-snow .ql-fill {
+  fill: rgb(26, 32, 44) !important;
+}
+body.chakra-ui-dark .ql-snow .ql-fill {
+  fill: rgba(255, 255, 255, 0.92) !important;
+}
+
+.ql-snow .ql-picker-label:hover {
+  color: rgb(79, 209, 197) !important;
+}
+
+.ql-snow .ql-stroke:hover {
+  stroke: rgb(79, 209, 197) !important;
+}
+
+.ql-snow .ql-fill:hover {
+  fill: rgb(79, 209, 197) !important;
+}
+
+.ql-container.ql-snow {
+  min-height: 88px !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+}

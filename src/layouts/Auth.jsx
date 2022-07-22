@@ -88,7 +88,7 @@ export default function AuthLayout(props) {
           <Box ref={wrapper} w="100%" minH="100vh">
             <Switch>
               {getRoutes(routes)}
-              <Redirect from="/" to="/login" />
+              <Redirect from="*" to="/" />
             </Switch>
           </Box>
         </Box>

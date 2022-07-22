@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useContext } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import { AuthContext } from '@/context/AuthContext';
 const AuthLayout = lazy(() => import('@/layouts/Auth'));
 const AdminLayout = lazy(() => import('@/layouts/Admin'));

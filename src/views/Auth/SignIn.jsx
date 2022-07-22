@@ -195,6 +195,27 @@ export default function SignIn() {
               </Text>
             </Text>
           </Flex>
+
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            maxW="100%"
+            mt="24px"
+          >
+            <Text fontWeight="medium" fontSize="sm">
+              Back to
+              <Text
+                as={Link}
+                to="/"
+                color={titleColor}
+                ms="5px"
+                fontWeight="bold"
+              >
+                Home
+              </Text>
+            </Text>
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

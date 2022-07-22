@@ -4,7 +4,7 @@ import {
   Button,
   Flex,
   HStack,
-  Link,
+  Link as ChakraLink,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -17,8 +17,8 @@ import {
 } from 'components/Icons/Icons';
 import SidebarResponsive from 'components/Sidebar/SidebarResponsive';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import routes from 'routes.js';
+import { Link } from 'react-router-dom';
+import routes from '@/routes';
 
 export default function AuthNavbar(props) {
   const [open, setOpen] = React.useState(false);

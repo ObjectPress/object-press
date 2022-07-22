@@ -28,7 +28,6 @@
     "graphql": "^16.5.0",
     "jwt-decode": "^3.1.2",
     "match-sorter": "6.3.0",
-    "node-sass": "7.0.1",
     "nouislider": "15.0.0",
     "react": "^18.2.0",
     "react-apexcharts": "^1.3.9",
@@ -45,10 +44,8 @@
     "react-swipeable-views": "0.14.0",
     "react-table": "7.7.0",
     "react-tagsinput": "3.19.0",
+    "sass": "^1.51.0",
     "stylis": "^4.0.13"
-  },
-  "resolutions": {
-    "react-error-overlay": "6.0.9"
   },
   "devDependencies": {
     "@types/react": "^18.0.15",

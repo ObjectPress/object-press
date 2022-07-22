@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import SidebarResponsive from '../Sidebar/SidebarResponsive';
 import React from 'react';
-import routes from '../../routes';
+import routes from '@/routes';
 
 export default function HeaderLinks(props) {
   const { logoText, secondary, ...rest } = props;

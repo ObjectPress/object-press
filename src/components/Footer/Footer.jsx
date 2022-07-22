@@ -7,6 +7,7 @@ export default function Footer(props) {
   // const linkTeal = useColorModeValue("teal.400", "red.200");=
   return (
     <Flex
+      mt="75px"
       flexDirection={{
         base: 'column',
         xl: 'row',
