@@ -9,7 +9,6 @@ import { Provider } from 'react-redux';
 import rootReducer from './store';
 import AuthProvider from './context/AuthContext';
 import App from './App';
-import './assets/css/styles.css';
 
 Amplify.configure(awsConfig);
 

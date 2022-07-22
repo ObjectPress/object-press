@@ -24,6 +24,13 @@ import {
 
 const routes = [
   {
+    path: '/dashboard',
+    name: 'Dashboard',
+    icon: <HomeIcon color="inherit" />,
+    component: Dashboard,
+    layout: '/admin',
+  },
+  {
     path: '/blogs',
     name: 'Blogs',
     icon: <DocumentIcon color="inherit" />,
@@ -42,13 +49,6 @@ const routes = [
     name: 'Posts',
     icon: <DocumentIcon color="inherit" />,
     component: Posts,
-    layout: '/admin',
-  },
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    icon: <HomeIcon color="inherit" />,
-    component: Dashboard,
     layout: '/admin',
   },
   {

@@ -1,43 +1,36 @@
-import React, { Component } from 'react';
+import { useEffect, useState } from 'react';
 import Card from '@/components/Card/Card';
 import Chart from 'react-apexcharts';
 import { barChartData, barChartOptions } from '@/variables/charts';
 
-class BarChart extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chartData: [],
-      chartOptions: {},
-    };
-  }
+export default function BarChart() {
+  const [chartData, setChartData] = useState(null);
+  const [chartOptions, setChartOptions] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  componentDidMount() {
-    this.setState({
-      chartData: barChartData,
-      chartOptions: barChartOptions,
-    });
-  }
+  useEffect(() => {
+    setChartData(barChartData);
+    setChartOptions(barChartOptions);
+    setLoading(false);
+  }, [chartData, chartOptions]);
 
-  render() {
-    return (
-      <Card
-        py="1rem"
-        height={{ sm: '200px' }}
-        width="100%"
-        bg="linear-gradient(81.62deg, #313860 2.25%, #151928 79.87%)"
-        position="relative"
-      >
+  return (
+    <Card
+      py="1rem"
+      height={{ sm: '70vh', md: '50vh' }}
+      width="100%"
+      bg="linear-gradient(81.62deg, #313860 2.25%, #151928 79.87%)"
+      position="relative"
+    >
+      {!loading && (
         <Chart
-          options={this.state.chartOptions}
-          series={this.state.chartData}
+          options={chartOptions}
+          series={chartData}
           type="bar"
           width="100%"
           height="100%"
         />
-      </Card>
-    );
-  }
+      )}
+    </Card>
+  );
 }
-
-export default BarChart;

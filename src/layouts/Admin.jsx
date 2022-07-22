@@ -16,6 +16,7 @@ import MainPanel from '@/components/Layout/MainPanel';
 import PanelContainer from '@/components/Layout/PanelContainer';
 import PanelContent from '@/components/Layout/PanelContent';
 import { PrivateRoute } from './Route';
+import '@/assets/css/styles.css';
 
 export default function AdminLayout(props) {
   const { ...rest } = props;
