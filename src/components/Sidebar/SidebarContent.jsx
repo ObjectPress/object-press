@@ -11,18 +11,18 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import IconBox from '../Icons/IconBox';
-import LogoIcon from '@/assets/img/logoIcon.png';
+import LogoText from '@/assets/img/logo-text.png';
 import { Separator } from '../Separator/Separator';
-import React from 'react';
+import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 // this function creates the links and collapses that appear in the sidebar (left menu)
 
-const SidebarContent = ({ logoText, routes }) => {
+const SidebarContent = ({ routes }) => {
   // to check for active links and opened collapses
   let location = useLocation();
   // this is for the rest of the collapses
-  const [state, setState] = React.useState({});
+  const [state, setState] = useState({});
 
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
@@ -174,17 +174,11 @@ const SidebarContent = ({ logoText, routes }) => {
         <Link
           href={`https://www.objectpress.io`}
           display="flex"
-          lineHeight="100%"
-          mb="30px"
-          fontWeight="bold"
+          mb="17px"
           justifyContent="center"
           alignItems="center"
-          fontSize="11px"
         >
-          <Image src={LogoIcon} w="32px" h="32px" me="10px" />
-          <Text fontSize="sm" mt="3px">
-            {logoText}
-          </Text>
+          <Image src={LogoText} w="auto" h="45px" />
         </Link>
         <Separator></Separator>
       </Box>

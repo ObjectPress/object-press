@@ -15,19 +15,20 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
+  Image,
 } from '@chakra-ui/react';
 import IconBox from '../Icons/IconBox';
-import { CreativeTimLogo } from '../Icons/Icons';
+import LogoText from '@/assets/img/logo-text.png';
 import { Separator } from '../Separator/Separator';
-import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useRef, useState } from 'react';
 
 function SidebarResponsive(props) {
   // to check for active links and opened collapses
   let location = useLocation();
   // this is for the rest of the collapses
-  const [state, setState] = React.useState({});
-  const mainPanel = React.useRef();
+  const [state, setState] = useState({});
+  const mainPanel = useRef();
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
     return location.pathname === routeName ? 'active' : '';
@@ -189,17 +190,11 @@ function SidebarResponsive(props) {
       <Link
         href={`https://www.objectpress.io`}
         display="flex"
-        lineHeight="100%"
-        mb="30px"
-        fontWeight="bold"
+        mb="17px"
         justifyContent="center"
         alignItems="center"
-        fontSize="11px"
       >
-        <CreativeTimLogo w="32px" h="32px" me="10px" />
-        <Text fontSize="sm" mt="3px">
-          Object Press
-        </Text>
+        <Image src={LogoText} w="auto" h="45px" />
       </Link>
       <Separator></Separator>
     </Box>
@@ -207,7 +202,7 @@ function SidebarResponsive(props) {
 
   // SIDEBAR
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
+  const btnRef = useRef();
   // Color variables
   return (
     <Flex

@@ -8,8 +8,7 @@ import theme from '@/theme/theme';
 import { PublicRoute } from './Route';
 import { Redirect, Switch } from 'react-router-dom';
 
-export default function AuthLayout(props) {
-  const { ...rest } = props;
+export default function AuthLayout() {
   // ref for the wrapper div
   const wrapper = createRef();
   useEffect(() => {

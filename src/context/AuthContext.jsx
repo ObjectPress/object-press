@@ -37,13 +37,13 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    async function authenticate() {
+    const authenticate = async () => {
       const validToken = await isValidToken();
 
       if (!validToken) {
         signOut();
       }
-    }
+    };
 
     if (isAuthenticated) {
       authenticate();

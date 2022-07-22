@@ -12,10 +12,12 @@ import {
   Switch,
   Text,
   useColorMode,
+  Image,
 } from '@chakra-ui/react';
 import { Separator } from '../Separator/Separator';
 import React, { useContext, useRef } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import LogoText from '@/assets/img/logo-text.png';
 
 export default function Configurator(props) {
   const {
@@ -46,11 +48,9 @@ export default function Configurator(props) {
       blockScrollOnMount={false}
     >
       <DrawerContent>
-        <DrawerHeader pt="24px" px="24px">
+        <DrawerHeader m="auto" pt="24px" px="24px">
           <DrawerCloseButton />
-          <Text fontSize="xl" fontWeight="bold" mt="16px">
-            Object Press
-          </Text>
+          <Image src={LogoText} m="auto" my="16px" w="auto" h="45px" />
           <Text fontSize="md" mb="16px">
             See your dashboard options.
           </Text>
