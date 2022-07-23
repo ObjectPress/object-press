@@ -11,7 +11,6 @@ import {
 import Card from '@/components/Card/Card';
 import CardBody from '@/components/Card/CardBody';
 import IconBox from '@/components/Icons/IconBox';
-import React from 'react';
 
 const MiniStatistics = ({ title, amount, percentage, icon }) => {
   const iconTeal = useColorModeValue('teal.300', 'teal.300');
@@ -43,7 +42,7 @@ const MiniStatistics = ({ title, amount, percentage, icon }) => {
                 ps="3px"
                 fontSize="md"
               >
-                {percentage > 0 ? `+${percentage}%` : `${percentage}%`}
+                {percentage > 0 ? `+${percentage}` : `${percentage}`}
               </StatHelpText>
             </Flex>
           </Stat>

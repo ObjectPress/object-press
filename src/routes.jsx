@@ -21,19 +21,20 @@ import {
   DocumentIcon,
   RocketIcon,
 } from '@/components/Icons/Icons';
+import { FaBook, FaChartBar, FaFileAlt } from 'react-icons/fa';
 
 const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    icon: <HomeIcon color="inherit" />,
+    icon: <FaChartBar />,
     component: Dashboard,
     layout: '/admin',
   },
   {
     path: '/blogs',
     name: 'Blogs',
-    icon: <DocumentIcon color="inherit" />,
+    icon: <FaBook />,
     component: Blogs,
     layout: '/admin',
   },
@@ -47,7 +48,7 @@ const routes = [
   {
     path: '/posts',
     name: 'Posts',
-    icon: <DocumentIcon color="inherit" />,
+    icon: <FaFileAlt />,
     component: Posts,
     layout: '/admin',
   },

@@ -1,52 +1,42 @@
 // Chakra imports
-import {
-  Flex,
-  Grid,
-  SimpleGrid,
-  useColorModeValue,
-  Text,
-} from '@chakra-ui/react';
+import { Flex, SimpleGrid } from '@chakra-ui/react';
 // assets
 import BarChart from '@/components/Charts/BarChart';
 // Custom icons
-import {
-  CartIcon,
-  DocumentIcon,
-  GlobeIcon,
-  WalletIcon,
-} from '@/components/Icons/Icons';
 import Activity from './components/Activity';
 import MiniStatistics from './components/MiniStatistics';
+import {
+  FaBook,
+  FaFileExport,
+  FaFileImport,
+  FaPhotoVideo,
+} from 'react-icons/fa';
 
 export default function Dashboard() {
-  const iconBoxInside = useColorModeValue('white', 'white');
+  const iconBoxInside = 'white';
 
   return (
     <Flex flexDirection="column" pt={{ base: '120px', md: '75px' }}>
       <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
         <MiniStatistics
-          title={"Today's Moneys"}
-          amount={'$53,000'}
-          percentage={55}
-          icon={<WalletIcon h={'24px'} w={'24px'} color={iconBoxInside} />}
+          title={'Total Blogs'}
+          percentage={1}
+          icon={<FaBook color={iconBoxInside} />}
         />
         <MiniStatistics
-          title={"Today's Users"}
-          amount={'2,300'}
-          percentage={5}
-          icon={<GlobeIcon h={'24px'} w={'24px'} color={iconBoxInside} />}
+          title={'Pending Posts'}
+          percentage={-1}
+          icon={<FaFileImport color={iconBoxInside} />}
         />
         <MiniStatistics
-          title={'New Clients'}
-          amount={'+3,020'}
-          percentage={-14}
-          icon={<DocumentIcon h={'24px'} w={'24px'} color={iconBoxInside} />}
+          title={'Active Posts'}
+          percentage={1}
+          icon={<FaFileExport color={iconBoxInside} />}
         />
         <MiniStatistics
-          title={'Total Sales'}
-          amount={'$173,000'}
-          percentage={8}
-          icon={<CartIcon h={'24px'} w={'24px'} color={iconBoxInside} />}
+          title={'Total Images'}
+          percentage={1}
+          icon={<FaPhotoVideo color={iconBoxInside} />}
         />
       </SimpleGrid>
 
