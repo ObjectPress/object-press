@@ -1,7 +1,7 @@
 export const barChartData = [
   {
-    name: 'Sales',
-    data: [330, 250, 110, 300, 490, 350, 270, 130, 425],
+    name: 'Posts',
+    data: [110, 300, 490, 330, 250, 110, 300, 490, 350, 270, 130, 425],
   },
 ];
 
@@ -14,26 +14,39 @@ export const barChartOptions = {
   tooltip: {
     style: {
       backgroundColor: 'red',
-      fontSize: '12px',
+      fontSize: '14px',
       fontFamily: undefined,
     },
     onDatasetHover: {
       style: {
         backgroundColor: 'red',
-        fontSize: '12px',
+        fontSize: '14px',
         fontFamily: undefined,
       },
     },
     theme: 'dark',
   },
   xaxis: {
-    categories: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    categories: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
     show: false,
     labels: {
-      show: false,
+      show: true,
       style: {
         colors: '#fff',
-        fontSize: '12px',
+        fontSize: '14px',
       },
     },
     axisBorder: {

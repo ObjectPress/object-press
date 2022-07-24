@@ -56,10 +56,9 @@ export default function SignIn() {
         localStorage.setItem('op-access-token', data.loginUser.accessToken);
         history.go(0);
       }
-    } catch (error) {
+    } catch {
       setLoading(false);
       setIsOpen(true);
-      console.log('error signing in', error);
     }
   };
 

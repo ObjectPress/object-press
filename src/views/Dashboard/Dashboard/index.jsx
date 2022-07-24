@@ -42,7 +42,7 @@ export default function Dashboard() {
 
       <Flex my="26px">
         <Activity
-          title={`Posts: ${1900 + new Date().getYear()}`}
+          title={`Total Posts: ${1900 + new Date().getYear()}`}
           percentage={23}
           chart={<BarChart />}
         />
