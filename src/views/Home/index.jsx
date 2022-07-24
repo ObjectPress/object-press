@@ -60,57 +60,15 @@ export default function Home() {
           textAlign="center"
           justifyContent="center"
           align="center"
-          mt="1.5rem"
+          mt="175px"
           mb="38px"
         >
           <Image src={Logo} h="175px" w="auto" />
 
-          <Text
-            fontSize="lg"
-            color="white"
-            fontWeight="normal"
-            mt="10px"
-            mb="26px"
-            maxW="300px"
-            // w={{ base: "90%", sm: "60%", lg: "40%", xl: "30%" }}
-          >
-            Open source headless content management.
-          </Text>
-          <Text
-            fontSize="lg"
-            color="white"
-            fontWeight="semibold"
-            mt="10px"
-            mb="26px"
-            maxW="300px"
-            // w={{ base: "90%", sm: "60%", lg: "40%", xl: "30%" }}
-          >
-            Sign up for free today!
-          </Text>
-          <Flex bg={bgButtonGroup} borderRadius="12px">
-            <Button
-              as={Link}
-              to="/login"
-              variant="no-hover"
-              w="135px"
-              h="40px"
-              fontSize="lg"
-              boxShadow={
-                activeButton.monthly
-                  ? '0px 2px 5.5px rgba(0, 0, 0, 0.06)'
-                  : 'none'
-              }
-              bg={activeButton.monthly ? bgActiveButton : 'transparent'}
-              onClick={() => setActiveButton({ monthly: true, yearly: false })}
-            >
-              Sign In
-            </Button>
-          </Flex>
-
           <Flex
             direction="column"
             mb={{ sm: '20px', lg: '60px' }}
-            mt={{ sm: '275px', md: '175px' }}
+            mt={{ sm: '375px', md: '275px' }}
             w={{ sm: '300px', md: '650px', xl: '930px' }}
           >
             <Flex direction="column" align="center" justify="center">

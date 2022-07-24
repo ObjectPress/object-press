@@ -95,7 +95,7 @@ export default function SignIn() {
           textAlign="center"
           justifyContent="center"
           align="center"
-          mt="6.5rem"
+          mt="8.5rem"
           mb="30px"
         >
           <Text fontSize="4xl" color="white" fontWeight="bold">
@@ -214,17 +214,15 @@ export default function SignIn() {
               maxW="100%"
               mt="24px"
             >
-              <Text fontWeight="medium" fontSize="sm">
-                Back to
-                <Text
-                  as={Link}
-                  to="/"
-                  color={titleColor}
-                  ms="5px"
-                  fontWeight="bold"
-                >
-                  Home
-                </Text>
+              <Text
+                as={Link}
+                to="/"
+                color={titleColor}
+                ms="5px"
+                fontWeight="bold"
+                fontSize="sm"
+              >
+                Forgot Password?
               </Text>
             </Flex>
           </Flex>

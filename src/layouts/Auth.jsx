@@ -1,12 +1,12 @@
 // chakra imports
-import { Box, ChakraProvider } from '@chakra-ui/react';
+import { Box, ChakraProvider, Portal } from '@chakra-ui/react';
 import Footer from '@/components/Footer/Footer';
 // core components
 import React, { createRef, useEffect, useRef } from 'react';
-import routes from '@/routes';
+import { authRoutes as routes } from '@/routes';
 import theme from '@/theme/theme';
 import { PublicRoute } from './Route';
-import { Redirect, Switch } from 'react-router-dom';
+import AuthNavbar from '@/components/Navbars/AuthNavbar';
 
 export default function AuthLayout() {
   // ref for the wrapper div
@@ -83,12 +83,15 @@ export default function AuthLayout() {
   return (
     <ChakraProvider theme={theme} resetCss={false} w="100%">
       <Box ref={navRef} w="100%">
+        <Portal containerRef={navRef}>
+          <AuthNavbar
+            secondary={getActiveNavbar(routes)}
+            logoText="Object Press"
+          />
+        </Portal>
         <Box w="100%">
           <Box ref={wrapper} w="100%" minH="100vh">
-            <Switch>
-              {getRoutes(routes)}
-              <Redirect from="*" to="/" />
-            </Switch>
+            {getRoutes(routes)}
           </Box>
         </Box>
         <Box px="24px" mx="auto" width="1044px" maxW="100%">

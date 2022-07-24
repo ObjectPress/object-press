@@ -7,7 +7,7 @@ import Footer from '@/components/Footer/Footer';
 import AdminNavbar from '@/components/Navbars/AdminNavbar';
 import Sidebar from '@/components/Sidebar';
 import { Redirect, Switch } from 'react-router-dom';
-import routes from '@/routes';
+import { adminRoutes as routes } from '@/routes';
 // Custom Chakra theme
 import theme from '@/theme/theme';
 import FixedPlugin from '@/components/FixedPlugin/FixedPlugin';

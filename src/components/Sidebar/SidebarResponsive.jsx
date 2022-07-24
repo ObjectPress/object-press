@@ -68,7 +68,7 @@ function SidebarResponsive(props) {
             {createLinks(prop.views)}
           </Box>
         );
-      } else if (prop.layout === '/admin') {
+      } else if (prop.layout !== '/inner') {
         return (
           <NavLink to={prop.path} key={prop.name}>
             {activeRoute(prop.path) === 'active' ? (

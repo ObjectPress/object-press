@@ -8,17 +8,11 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import {
-  CreativeTimLogo,
-  DocumentIcon,
-  HomeIcon,
-  PersonIcon,
-  RocketIcon,
-} from 'components/Icons/Icons';
-import SidebarResponsive from 'components/Sidebar/SidebarResponsive';
+import { DocumentIcon, HomeIcon, RocketIcon } from '@/components/Icons/Icons';
+import SidebarResponsive from '@/components/Sidebar/SidebarResponsive';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import routes from '@/routes';
+import { NavLink } from 'react-router-dom';
+import { authRoutes } from '@/routes';
 
 export default function AuthNavbar(props) {
   const [open, setOpen] = React.useState(false);
@@ -65,31 +59,15 @@ export default function AuthNavbar(props) {
     navbarBackdrop = 'none';
     bgButton = 'white';
     colorButton = 'gray.700';
-    mainText = 'white';
+    mainText = 'inherit';
     navbarPosition = 'absolute';
   }
-  var brand = (
-    <Link
-      href={`${process.env.PUBLIC_URL}`}
-      target="_blank"
-      display="flex"
-      lineHeight="100%"
-      fontWeight="bold"
-      justifyContent="center"
-      alignItems="center"
-      color={mainText}
-    >
-      <CreativeTimLogo w="32px" h="32px" me="10px" />
-      <Text fontSize="sm" mt="3px">
-        {logoText}
-      </Text>
-    </Link>
-  );
+
   var linksAuth = (
     <HStack display={{ sm: 'none', lg: 'flex' }}>
-      <NavLink to="/admin/dashboard">
+      <NavLink to="/">
         <Button
-          fontSize="sm"
+          fontSize="md"
           ms="0px"
           px="0px"
           me={{ sm: '2px', md: '16px' }}
@@ -97,41 +75,13 @@ export default function AuthNavbar(props) {
           variant="transparent-with-icon"
           leftIcon={<HomeIcon color={navbarIcon} w="12px" h="12px" me="0px" />}
         >
-          <Text>Dashboard</Text>
+          <Text>Home</Text>
         </Button>
       </NavLink>
-      <NavLink to="/admin/profile">
+
+      <NavLink to="/login">
         <Button
-          fontSize="sm"
-          ms="0px"
-          px="0px"
-          me={{ sm: '2px', md: '16px' }}
-          color={navbarIcon}
-          variant="transparent-with-icon"
-          leftIcon={
-            <PersonIcon color={navbarIcon} w="12px" h="12px" me="0px" />
-          }
-        >
-          <Text>Profile</Text>
-        </Button>
-      </NavLink>
-      <NavLink to="/auth/signup">
-        <Button
-          fontSize="sm"
-          px="0px"
-          me={{ sm: '2px', md: '16px' }}
-          color={navbarIcon}
-          variant="transparent-with-icon"
-          leftIcon={
-            <RocketIcon color={navbarIcon} w="12px" h="12px" me="0px" />
-          }
-        >
-          <Text>Sign Up</Text>
-        </Button>
-      </NavLink>
-      <NavLink to="/auth/signin">
-        <Button
-          fontSize="sm"
+          fontSize="md"
           ms="0px"
           px="0px"
           me={{ sm: '2px', md: '16px' }}
@@ -142,6 +92,21 @@ export default function AuthNavbar(props) {
           }
         >
           <Text>Sign In</Text>
+        </Button>
+      </NavLink>
+
+      <NavLink to="/register">
+        <Button
+          fontSize="md"
+          px="0px"
+          me={{ sm: '2px', md: '16px' }}
+          color={navbarIcon}
+          variant="transparent-with-icon"
+          leftIcon={
+            <RocketIcon color={navbarIcon} w="12px" h="12px" me="0px" />
+          }
+        >
+          <Text>Sign Up</Text>
         </Button>
       </NavLink>
     </HStack>
@@ -166,7 +131,6 @@ export default function AuthNavbar(props) {
       alignItems="center"
     >
       <Flex w="100%" justifyContent={{ sm: 'start', lg: 'space-between' }}>
-        {brand}
         <Box
           ms={{ base: 'auto', lg: '0px' }}
           display={{ base: 'flex', lg: 'none' }}
@@ -174,13 +138,12 @@ export default function AuthNavbar(props) {
           <SidebarResponsive
             logoText={props.logoText}
             secondary={props.secondary}
-            routes={routes}
+            routes={authRoutes}
             // logo={logo}
             {...rest}
           />
         </Box>
-        {linksAuth}
-        <Link href="https://docs.objectpress.io" target="_blank">
+        <ChakraLink href="https://docs.objectpress.io" target="_blank">
           <Button
             bg={bgButton}
             color={colorButton}
@@ -195,7 +158,9 @@ export default function AuthNavbar(props) {
           >
             Documentation
           </Button>
-        </Link>
+        </ChakraLink>
+
+        {linksAuth}
       </Flex>
     </Flex>
   );

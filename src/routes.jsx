@@ -8,27 +8,15 @@ const Blogs = lazy(() => import('@/views/Dashboard/Blogs'));
 const Blog = lazy(() => import('@/views/Dashboard/Blog'));
 const Posts = lazy(() => import('@/views/Dashboard/Posts'));
 
-import { FaBook, FaChartBar, FaFileAlt, FaUserAlt } from 'react-icons/fa';
+import {
+  FaBook,
+  FaChartBar,
+  FaFileAlt,
+  FaHome,
+  FaUserAlt,
+} from 'react-icons/fa';
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home,
-    layout: '/auth',
-  },
-  {
-    path: '/login',
-    name: 'Sign In',
-    component: SignIn,
-    layout: '/auth',
-  },
-  {
-    path: '/register',
-    name: 'Sign Up',
-    component: SignUp,
-    layout: '/auth',
-  },
+export const adminRoutes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
@@ -46,6 +34,7 @@ const routes = [
   {
     path: '/blog/:id',
     name: 'Blog',
+    icon: <FaBook />,
     component: Blog,
     layout: '/inner',
   },
@@ -65,4 +54,26 @@ const routes = [
   },
 ];
 
-export default routes;
+export const authRoutes = [
+  {
+    path: '/',
+    name: 'Home',
+    icon: <FaHome />,
+    component: Home,
+    layout: '/auth',
+  },
+  {
+    path: '/login',
+    name: 'Sign In',
+    icon: <FaHome />,
+    component: SignIn,
+    layout: '/auth',
+  },
+  {
+    path: '/register',
+    name: 'Sign Up',
+    icon: <FaHome />,
+    component: SignUp,
+    layout: '/auth',
+  },
+];
