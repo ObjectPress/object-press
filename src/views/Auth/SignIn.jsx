@@ -19,8 +19,8 @@ import {
 import BgSignUp from '@/assets/img/BgSignUp.webp';
 import { useMutation } from '@apollo/client';
 import { LOGIN_MUTATION } from '@/graphql/mutations';
-import { AuthContext } from '@/context/AuthContext';
 import { Helmet } from 'react-helmet';
+import Notify from '@/components/Notify/Notify';
 
 export default function SignIn() {
   const titleColor = useColorModeValue('teal.300', 'teal.200');
@@ -29,6 +29,7 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const [login] = useMutation(LOGIN_MUTATION);
   const history = useHistory();
@@ -56,10 +57,10 @@ export default function SignIn() {
         history.go(0);
       }
     } catch (error) {
+      setLoading(false);
+      setIsOpen(true);
       console.log('error signing in', error);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -230,6 +231,14 @@ export default function SignIn() {
           </Flex>
         </Flex>
       </Flex>
+
+      <Notify
+        title="Error:"
+        description="Invalid email or password"
+        type="error"
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
     </>
   );
 }
