@@ -39,6 +39,7 @@ const ChangePassword = () => {
               borderRadius="15px"
               placeholder="Current Password"
               fontSize="xs"
+              type="password"
             />
           </FormControl>
           <FormControl>
@@ -49,6 +50,7 @@ const ChangePassword = () => {
               borderRadius="15px"
               placeholder="New Password"
               fontSize="xs"
+              type="password"
             />
           </FormControl>
           <FormControl>
@@ -59,6 +61,7 @@ const ChangePassword = () => {
               borderRadius="15px"
               placeholder="Confirm New Password"
               fontSize="xs"
+              type="password"
             />
           </FormControl>
           <Flex direction="column">

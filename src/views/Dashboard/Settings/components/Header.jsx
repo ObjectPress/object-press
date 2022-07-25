@@ -1,5 +1,5 @@
 // Chakra imports
-import { Avatar, Flex, Text, useColorModeValue } from '@chakra-ui/react';
+import { Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import avatar4 from '@/assets/img/avatars/avatar4.png';
 // Custom components
 import Card from '@/components/Card/Card';
@@ -27,13 +27,6 @@ const Header = () => {
           w="100%"
         >
           <Flex align="center">
-            <Avatar
-              src={avatar4}
-              w="80px"
-              h="80px"
-              me="22px"
-              borderRadius="15px"
-            />
             <Flex direction="column">
               <Text color={textColor} fontWeight="bold" fontSize="lg">
                 Esthera Jackson
