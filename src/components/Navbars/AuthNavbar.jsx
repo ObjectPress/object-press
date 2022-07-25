@@ -35,10 +35,7 @@ export default function AuthNavbar(props) {
     '1.5px solid #FFFFFF',
     '1.5px solid rgba(255, 255, 255, 0.31)'
   );
-  let navbarShadow = useColorModeValue(
-    '0px 7px 23px rgba(0, 0, 0, 0.05)',
-    'none'
-  );
+  let navbarShadow = useColorModeValue('xl', 'none');
   let navbarFilter = useColorModeValue(
     'none',
     'drop-shadow(0px 7px 23px rgba(0, 0, 0, 0.05))'

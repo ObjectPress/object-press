@@ -15,7 +15,6 @@ import {
 import basic from '@/assets/img/BgSignUp.webp';
 import Logo from '@/assets/img/logo-light.png';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 export default function Home() {
@@ -60,15 +59,23 @@ export default function Home() {
           textAlign="center"
           justifyContent="center"
           align="center"
-          mt="175px"
+          mt="125px"
           mb="38px"
         >
-          <Image src={Logo} h="175px" w="auto" />
+          <Flex
+            direction="column"
+            bgImage={basic}
+            borderRadius="15px"
+            p="10px"
+            boxShadow="xl"
+          >
+            <Image src={Logo} h="275px" w="auto" />
+          </Flex>
 
           <Flex
             direction="column"
             mb={{ sm: '20px', lg: '60px' }}
-            mt={{ sm: '375px', md: '275px' }}
+            mt={{ sm: '275px', md: '225px' }}
             w={{ sm: '300px', md: '650px', xl: '930px' }}
           >
             <Flex direction="column" align="center" justify="center">
@@ -78,7 +85,7 @@ export default function Home() {
                 fontSize={{ sm: '3xl', md: '4xl' }}
                 mb="12px"
               >
-                v2.0 Coming Soon...
+                v2 Coming Soon...
               </Text>
 
               <Text
